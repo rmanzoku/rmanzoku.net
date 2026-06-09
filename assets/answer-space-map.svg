@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" role="img" aria-labelledby="title desc">
+  <title id="title">AI harness map</title>
+  <desc id="desc">A diagram showing answer space shaped by context, source of record, tools, review, and human judgment.</desc>
+  <rect width="720" height="520" fill="#fffdf8"/>
+  <rect x="32" y="32" width="656" height="456" rx="18" fill="#f7f6f1" stroke="#d9d5ca" stroke-width="2"/>
+  <circle cx="360" cy="260" r="154" fill="#e6f0ed" stroke="#0e6f73" stroke-width="3"/>
+  <circle cx="360" cy="260" r="92" fill="#fffdf8" stroke="#b85c38" stroke-width="3"/>
+  <text x="360" y="246" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700" fill="#1b1c1d">Answer</text>
+  <text x="360" y="280" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700" fill="#1b1c1d">Space</text>
+  <text x="360" y="324" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" fill="#666b72">shaped by harness</text>
+  <g font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#1b1c1d">
+    <rect x="78" y="78" width="188" height="58" rx="8" fill="#fffdf8" stroke="#d9d5ca"/>
+    <text x="172" y="114" text-anchor="middle">Context</text>
+    <rect x="454" y="78" width="188" height="58" rx="8" fill="#fffdf8" stroke="#d9d5ca"/>
+    <text x="548" y="114" text-anchor="middle">Source of Record</text>
+    <rect x="78" y="384" width="188" height="58" rx="8" fill="#fffdf8" stroke="#d9d5ca"/>
+    <text x="172" y="420" text-anchor="middle">Tools</text>
+    <rect x="454" y="384" width="188" height="58" rx="8" fill="#fffdf8" stroke="#d9d5ca"/>
+    <text x="548" y="420" text-anchor="middle">Review</text>
+    <rect x="266" y="52" width="188" height="58" rx="8" fill="#fffdf8" stroke="#d9d5ca"/>
+    <text x="360" y="88" text-anchor="middle">Human Judgment</text>
+  </g>
+  <g stroke="#0e6f73" stroke-width="3" fill="none" stroke-linecap="round">
+    <path d="M246 126 C292 152 318 180 336 214"/>
+    <path d="M474 126 C428 152 402 180 384 214"/>
+    <path d="M246 394 C292 368 318 340 336 306"/>
+    <path d="M474 394 C428 368 402 340 384 306"/>
+    <path d="M360 110 L360 166"/>
+  </g>
+</svg>
