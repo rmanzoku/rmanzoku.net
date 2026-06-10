@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MBP M5 Maxを買ったのでAI開発環境を棚卸しした - Ryo Manzoku / 満足亮</title>
+    <meta name="description" content="MBP M5 Maxの購入をきっかけに、AI開発環境を複数AI、dotfiles / Skill、artifact、モバイル実機QA、ローカルLLMの観点で棚卸しする。">
+    <link rel="canonical" href="https://rmanzoku.net/articles/ai-dev-environment-mbp/">
+    <link rel="stylesheet" href="/assets/site.css">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "MBP M5 Maxを買ったのでAI開発環境を棚卸しした",
+        "datePublished": "2026-05-18",
+        "dateModified": "2026-06-11",
+        "inLanguage": "ja",
+        "author": { "@type": "Person", "name": "Ryo Manzoku", "url": "https://rmanzoku.net/" },
+        "mainEntityOfPage": "https://rmanzoku.net/articles/ai-dev-environment-mbp/",
+        "url": "https://rmanzoku.net/articles/ai-dev-environment-mbp/",
+        "sameAs": ["https://x.com/rmanzoku/status/2056200970636591318"]
+      }
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="/">
+          <strong>Ryo Manzoku</strong>
+          <span>AI harness / business implementation</span>
+        </a>
+        <div class="nav-links">
+          <a href="/about/">About</a>
+          <a href="/work/">Work</a>
+          <a href="/articles/" aria-current="page">Articles</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page">
+      <p class="eyebrow">Articles</p>
+      <h1>MBP M5 Maxを買ったのでAI開発環境を棚卸しした</h1>
+      <p class="meta">Published: 2026-05-18 · First published on <a href="https://x.com/rmanzoku/status/2056200970636591318">X</a></p>
+
+      <p>MBP M5 Maxを買った。</p>
+      <p>これは Mac のレビューではない。MBP の初期設定をしながら、自分の AI 開発環境を棚卸しした記録だ。</p>
+      <p>この 1 週間で、いくつかの前提が同時に変わった。複数の開発を同時に回す中でオフロード先が必要になり、ローカル LLM の重要度も上がってきた。同じタイミングで、X / Grok と Hermes Agent の連携が実用圏に入り、Codex mobile から作業中のエージェントへ接続して steer する運用も使いやすくなってきた。</p>
+      <p>AI 開発環境は、エディタやターミナル設定だけでは足りなくなっている。モデル、エージェント、ローカル推論、RAG、ブラウザ検証、モバイル実機 QA、会議録音の取り込み、外出中の進捗管理、dotfiles / Skill 同期まで含めて 1 つの環境として設計する必要がある。</p>
+      <h2>今の役割分担</h2>
+      <p>まずマシンの役割。</p>
+      <pre><code class="language-text">             Pixel10 fold
+        外出中の進捗確認とsteer
+             │              │
+             ▼              ▼
+MBA M4 ───────────────▶ MBP M5 Max
+普段の作業              ビルド、実機QA
+AIへの指示              ローカルLLM、重いAIタスク
+</code></pre>
+      <p>メイン機は今も MacBook Air M4 だ。Apple M4、10 コア CPU、32GB メモリの構成で、普段のコーディング、ドキュメント作業、AI への指示出しには十分使いやすい。</p>
+      <p>問題は、複数の開発を同時に回す場合だ。特にモバイルアプリのビルドと QA を含む作業を並行すると、MBA だけでは余裕がなくなってきた。ビルドを回しながらオンラインミーティングに入るような場面では、負荷がそのまま仕事のしづらさになる。</p>
+      <p>そこで、16 インチ MacBook Pro をオフロード機として置くことにした。構成は M5 Max、18 コア CPU、40 コア GPU、16 コア Neural Engine、128GB unified memory、2TB SSD。MacBook Pro としてもかなりハイエンドな構成だ。</p>
+      <p>このエントリは自慢エントリなので、開発環境の話はおまけだ。16 インチの筐体に M5 Max、128GB メモリ、2TB SSD を積んだマシンが、机の上でビルド、実機 QA、ローカル LLM、複数エージェントの長時間タスクを受け持ってくれるのはかなり気持ちがいい。単に速いというより、手元の作業を止めずに重い仕事を投げられる余裕を買った感覚に近い。</p>
+      <p>実際には MBA から macOS の画面共有で MBP を操作する。体験としては 2 台を行き来するというより、MBA 上で 1 つの Mac を操作している感覚に近い。重い処理だけ MBP 側へ逃がし、普段の作業と steer は MBA 側に残す。</p>
+      <h2>AIの使い分け</h2>
+      <p>今使っている AI は、用途ごとに分けている。</p>
+      <ul>
+      <li>Codex: コーディング、実装、調査、記事化</li>
+      <li>Claude: 会社運営、バックオフィス、ドキュメント中心プロジェクト、レビュー</li>
+      <li>Copilot Enterprise: 案件指定の開発支援、レビュー</li>
+      <li>Gemini: Google Workspace 文脈の並列調査</li>
+      <li>Grok + Hermes: X / Web 文脈の調査、開発者コミュニティの動向確認</li>
+      <li>ローカル LLM: プライベートデータ、RAG、ローカルオンリー案件の検証</li>
+      </ul>
+      <p>コーディングの主軸は Codex。レビューは Claude か Copilot Enterprise に寄せる。会社運営、バックオフィス、ドキュメント中心のプロジェクトは Claude を中心にしている。</p>
+      <p>Gemini は Google Workspace で使えるため、並列調査の一角として使う。Claude や GPT と違う観点が出ることがあり、調査テーマの幅を広げる用途に向いている。</p>
+      <p>Grok は以前、直接 Grok API 経由で呼ぶ方向だった。今は X Premium で使える Grok を Hermes 経由で呼ぶ形に寄せている。X の内容を見られるのが大きい。開発者コミュニティは依然として X が強く、ツールや OSS の作者が設計思想、今後の方針、リリース前後の判断を投稿していることがある。公式 docs や GitHub だけでは見えない温度感を拾えるので、技術選定の材料が増える。</p>
+      <h2>起点はCodex DesktopとClaude Desktop</h2>
+      <p>オーケストレーションの起点は Codex Desktop と Claude Desktop に寄せている。</p>
+      <p>以前は Conductor を使っていた。複数の worktree や AI エージェント作業を扱うには便利だったが、最近は公式の Mac アプリが十分に使えるようになってきた。入口は公式アプリに寄せ、実行や delegation は repo 側の Skill / runner / artifact 契約で揃える方向にしている。</p>
+      <p>アプリの UI は日常操作に使い、再現性と監査性はファイル側に残す。入口は Desktop App、作業の契約は repo rules / Skill、実行は runner、結果は <code>.context/</code> の artifact という分担だ。どのアプリから始めても、最終的には同じ repo のルール、同じ Skill、同じ artifact 契約に乗せる。</p>
+      <h2>dotfilesとSkillを持ち運ぶ</h2>
+      <p>この運用を別マシンでも再現できるように、環境設定は chezmoi で管理している。目的は環境設定の永続化とポータビリティだ。</p>
+      <p>公開リポジトリはこれ。</p>
+      <p><a href="https://github.com/rmanzoku/dotfiles">github.com/rmanzoku/dotfiles</a></p>
+      <p>新しい Mac では Homebrew、git、chezmoi を入れ、dotfiles repo を <code>~/.local/share/chezmoi</code> に clone して <code>chezmoi apply</code> する。その後、<code>Brewfile</code> で CLI 群を復元し、bootstrap script で作業用 workspace を用意する。</p>
+      <p>管理するのは、再現可能な宣言的設定だけだ。shell、git、Codex / Claude / Gemini / Qwen まわりの設定、AI 用 <code>AGENTS.md</code>、runner Skill、Desktop automation の <code>automation.toml</code> など。一方で、lock、ログ、highwatermark、jitter salt、セッション履歴のような machine-local state は同期しない。</p>
+      <p>自作 Skill も dotfiles 側で管理している。<code>skills/</code> 配下に publisher 形式で置き、必要なものを <code>gh skill install --from-local</code> で Claude Code や Codex に入れる。<code>~/.claude/skills</code> や <code>~/.codex/skills</code> を丸ごと同期するのではなく、配布元を dotfiles repo に置き、インストール手順を manifest として残す。</p>
+      <h2>別AI呼び出しもSkill化する</h2>
+      <p>コーディングエージェントから別 AI を呼び出す導線も Skill 化している。</p>
+      <p>Claude、Codex、Gemini、Grok、Copilot をその場の ad hoc コマンドで直接呼ぶのではなく、runner Skill を経由する。</p>
+      <ul>
+      <li><a href="https://github.com/rmanzoku/dotfiles/blob/main/skills/claude-cli-runner/SKILL.md"><code>claude-cli-runner</code></a></li>
+      <li><a href="https://github.com/rmanzoku/dotfiles/blob/main/skills/codex-cli-runner/SKILL.md"><code>codex-cli-runner</code></a></li>
+      <li><a href="https://github.com/rmanzoku/dotfiles/blob/main/skills/gemini-cli-runner/SKILL.md"><code>gemini-cli-runner</code></a></li>
+      <li><a href="https://github.com/rmanzoku/dotfiles/blob/main/skills/grok-cli-runner/SKILL.md"><code>grok-cli-runner</code></a></li>
+      <li><a href="https://github.com/rmanzoku/dotfiles/blob/main/skills/copilot-cli-runner/SKILL.md"><code>copilot-cli-runner</code></a></li>
+      </ul>
+      <p>別 AI への依頼も <code>.context/</code> 配下の request / response / summary / failure artifact として残す。どのモデルへ、どんな入力で、どの timeout で投げ、何が返り、失敗した場合にどこで止まったのかをあとから確認できる。</p>
+      <h2>マルチエージェント協調ワークフロー</h2>
+      <p>この運用を一番わかりやすく形にしているのが、マルチエージェント協調ワークフローだ。</p>
+      <p><code>research</code> Skill のような具体名で説明すると調査用途に寄りすぎるが、実際にやっていることはもっと抽象的だ。親エージェントが目的、スコープ、出力形式、判断基準を決め、複数の子エージェントや別モデルに独立した作業を渡し、最後に親が比較、統合、追加確認を行う。</p>
+      <pre><code class="language-text">Parent Agent
+  │
+  ├── Claude
+  ├── Codex
+  ├── Gemini
+  └── Grok
+  │
+  ▼
+Synthesis Artifact
+</code></pre>
+      <p>ポイントは、親エージェントが全部を自分で調べないことだ。複数 researcher を並列起動し、それぞれが独立して調査する。他 researcher の出力や最終レポートには触らせない。</p>
+      <p>各 researcher の出力は <code>.context/</code> 配下に保存する。Skill は「誰が何を出すべきか」という契約を持つ。実行方法、runner、CLI の細かい呼び出しは registry / resolver / runner 側に寄せる。モデルや実行基盤が変わっても、Skill の構造を大きく変えずに済む。</p>
+      <h2>Planよりgrill-meとsteer</h2>
+      <p>以前は、軽量モデルに Plan をレビューさせてから実行する運用をよく使っていた。実行前に見落としを潰すには有効だった。</p>
+      <p>最近は、Plan レビューに時間を使うより、まず実装して QA と evaluator で整理する方が早く、低ストレスになってきた。ハーネスが整ってきたことと、モデル自体が進歩したことの両方があると思う。</p>
+      <p>今は Plan で最初から整地しすぎるより、<a href="https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md">Matt Pocock の <code>grill-me</code></a> と steer で詰める方向に寄せている。evaluator はその補完だ。</p>
+      <p><code>grill-me</code> では、方針や設計をかなりしつこく問い返させる。意思決定の分岐、捨てる選択肢、まだ曖昧な前提を言語化する。</p>
+      <p>steer は、作業中のエージェントのチャットに途中から介入して、前提を直したり、優先順位を変えたり、次の確認を差し込んだりする機能として使っている。最初の Plan に従い続けるのではなく、出てきた artifact、失敗、違和感を見て、その場で方向修正する。</p>
+      <p>この運用の根っこにあるのは artifact 主義だ。</p>
+      <p>大きい Plan を立てても、AI が途中で勝手に無視したり、完了したつもりになったりすることがあった。そこで、進捗を口頭報告ではなく成果物として細かく見えるようにした。</p>
+      <p>「やりました」という返事ではなく、実際の diff、テスト結果、スクリーンショット、UI hierarchy、ログ、summary、review artifact を出させる。Phase や Step がある作業では、次に進む条件を artifact の存在に寄せる。</p>
+      <p>これはジュニアメンバーと働くときに、途中成果物を細かく見て方向修正するのに近い。違うのは、その途中成果物を見るのもまた AI であることだ。人間が全部のログやスクリーンショットを読むのではなく、AI に読ませた結果を見て steer する。</p>
+      <p>全体としては、「たまにサボるが優秀な同僚」と一緒に働くための仕組みを作っている感覚に近い。能力は高い。ただし、放っておくと Plan を飛ばしたり、見たつもりになったりする。だから、成果物を残し、別の AI に見せ、人間が方向を修正する。</p>
+      <h2>ローカルLLM</h2>
+      <p>MBP 側で試したかったものの 1 つがローカル LLM だ。</p>
+      <p>まだ本番運用ではなく調査段階。クラウド AI の代替というより、クラウド系 AI へのリスクヘッジと、ローカルオンリーな案件に対応するための知見を溜める目的で触っている。</p>
+      <p>128GB unified memory があると巨大モデルを動かしたくなるが、最初から 100B 超えに行くより、27B-40B 級を安定して回し、速度、メモリ、品質、RAG との相性を見る方が実利がある。</p>
+      <p>初期構成は、実験 runtime に <code>mlx-lm</code>、常用 API runtime に <code>Ollama</code> または <code>llama.cpp llama-server</code>、RAG に <code>LanceDB</code> / <code>Qdrant</code> + reranker を考えている。</p>
+      <p>期待しているのは画像処理だ。ローカル LLM / VLM の画像理解が強くなれば、モバイル QA でスクリーンショットを毎回クラウドのコーディングエージェントへ大量アップロードする必要が減る。MBP 側で一次レビュー、差分抽出、異常検出までできれば、アップロード帯域の問題はかなり軽くなる。</p>
+      <h2>モバイル実機QA</h2>
+      <p>オフロード先が必要になった理由の大きな部分が、モバイルアプリ QA だ。ここでは Maestro を採用している。</p>
+      <p>React Native のようなモバイル実装では、コード上は正しく見えても、実機で見ると余白、フォント、Safe Area、スクロール、キーボード、タップ領域が崩れることがある。</p>
+      <p>QA では Maestro の flow、screenshot、UI hierarchy、ログ、summary JSON、report Markdown を <code>.context/qa-runs/&lt;timestamp&gt;/</code> に残す。route coverage は matrix 化し、画面ごとに selector、必須 artifact、manual exception を管理する。</p>
+      <p>Android は USB 経由で実機 QA の導線を作りやすい。一方で iOS は、自分の環境では同じ形の実機 QA をなかなか完成させられなかった。</p>
+      <p>そこで効いたのが、Codex の Computer Use と Mac の Mirroring の組み合わせだ。ミラーリングした実機画面を開き、Computer Use でタップ、入力、スクロール、画面遷移を操作する。スクリーンショットや UI 状態を見て、別モデルまたは同じエージェントが修正点を出す。</p>
+      <p>ここで、MBP をメインの MBA と別マシンにしたことが効く。Mirroring、Computer Use、ビルド、ログ収集、スクリーンショット保存を MBP 側で回せるので、MBA ではミーティングや通常の開発、steer を続けられる。実機 QA のためにメイン機の操作感を犠牲にしなくて済む。</p>
+      <p>これはシミュレーターだけの QA とは感触が違う。実機では、指で触る前提の密度、遷移速度、キーボード表示、OS 側 UI との干渉が見える。</p>
+      <h2>外出中の運用</h2>
+      <p>外出しているときは、だいたいミーティングのために移動している。</p>
+      <p>会議は <a href="https://amzn.to/4tHNBSb">Anker Soundcore Work</a>（Amazonアソシエイトリンク）で録音し、書き起こしを取り、AI で要点、決定事項、TODO、関連リポジトリへの反映候補に分ける。必要なものは、そのまま該当 repo の <code>docs/</code>、<code>projects/</code>、<code>knowledge/</code>、<code>.context/</code> に取り込む。</p>
+      <p>会議メモを単なる議事録で終わらせず、AI が次の作業に使える入力へ変換する。</p>
+      <p>移動中は、家を出る前に投げたタスクの進捗確認と方向修正を Pixel10 fold から行う。Pixel10 fold は MBA と MBP の双方に外から接続する端末で、長い実装、調査、レビュー、ローカル QA を走らせておき、移動中に進捗を見て、詰まっていれば前提を直す。終わっていれば次の指示を出す。</p>
+      <h2>まとめ</h2>
+      <p>今回の主役は、スペックそのものではなく、「たまにサボるが優秀な同僚」と一緒に働くための仕組みだ。</p>
+      <p>ただし、MBP M5 Max はその仕組みを支えるオフロード先としてかなり満足している。メイン機を MBA に残し、重い処理を MBP に逃がし、外出中は Pixel10 fold から MBA / MBP 双方へ入って steer する。この分担にすると、複数 AI を使った開発がかなり運用しやすくなる。</p>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span>© 2026 Ryo Manzoku</span>
+        <span><a href="/about/">About</a> · <a href="/work/">Work</a> · <a href="/articles/">Articles</a> · <a href="/contact/">Contact</a> · <a href="/llms.txt">llms.txt</a> · <a href="/sitemap.xml">sitemap</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

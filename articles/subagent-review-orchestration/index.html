@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Subagentはいつ使うべきか マルチAIレビュー比較のメモ - Ryo Manzoku / 満足亮</title>
+    <meta name="description" content="CodexのSubagentとシェルによる並列実行を、マルチAIレビューのorchestratorとして比較計測した調査メモ。">
+    <link rel="canonical" href="https://rmanzoku.net/articles/subagent-review-orchestration/">
+    <link rel="stylesheet" href="/assets/site.css">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Subagentはいつ使うべきか マルチAIレビュー比較のメモ",
+        "datePublished": "2026-03-17",
+        "dateModified": "2026-06-11",
+        "inLanguage": "ja",
+        "author": { "@type": "Person", "name": "Ryo Manzoku", "url": "https://rmanzoku.net/" },
+        "mainEntityOfPage": "https://rmanzoku.net/articles/subagent-review-orchestration/",
+        "url": "https://rmanzoku.net/articles/subagent-review-orchestration/",
+        "sameAs": ["https://x.com/rmanzoku/status/2033831655413322046"]
+      }
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="/">
+          <strong>Ryo Manzoku</strong>
+          <span>AI harness / business implementation</span>
+        </a>
+        <div class="nav-links">
+          <a href="/about/">About</a>
+          <a href="/work/">Work</a>
+          <a href="/articles/" aria-current="page">Articles</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page">
+      <p class="eyebrow">Articles</p>
+      <h1>Subagentはいつ使うべきか マルチAIレビュー比較のメモ</h1>
+      <p class="meta">Published: 2026-03-17 · First published on <a href="https://x.com/rmanzoku/status/2033831655413322046">X</a></p>
+
+      <p>2026-03-17に<a href="https://x.com/rmanzoku/status/2033831655413322046">Xのスレッド</a>として公開した調査メモの再掲です。以下、スレッドの各投稿をそのまま掲載します。</p>
+      <p>CodexのSubagentがGAになったので、複数のAI CLIにレビューを委譲するorchestratorとして測ってみた。手元の対象は最近作っている記事作成用のリポジトリで、reviewerとして3つのAIを使う時に、既存のシェルによる並列実行とSubagentからの移譲でどうなるかを見た。結果は、</p>
+      <p>ある意味当然だがシェルによる並列実行が優位だった。2つの記事を渡して、シェルによる並列実行は約<code>101.7 s</code>、Subagentは約<code>191.5 s</code>。単純に複数のAI CLIへレビューを並列委譲するだけなら、Subagentがそのまま置き換え先になるわけではなさそうだった。</p>
+      <p>面白かったのは、Subagentの遅さの中身。レビュー処理自体が遅いのか、AIが仕事に着手するまでの待ち時間が遅いのかを分けて見るために、待ち時間を追加で計測した。全体で<code>237,745 ms</code>のうち、最も遅いAIは待ち時間<code>93,767 ms</code>と実行<code>143,978 ms</code>に分かれた。</p>
+      <p>この時、3レビュアークリティカルパスでは、全体<code>237.7 s</code>のうち約<code>93.8 s</code>が待ち時間、約<code>144.0 s</code>がレビュー実行だった。つまり遅延の内訳は<code>待ち時間39% / レビュー実行61%</code>くらい。Subagentの遅さはレビュー本体だけではなく、着手待ちもかなり大きい。</p>
+      <p>もちろん、この比較実験はSubagentの強みを最大限に使う課題設定ではない。見ていたのは「既存の複数のAI CLIへのレビュー委譲をどう並列実行するか」であって、複雑な分岐や多段の判断フローはあまり使っていない。だから結論は「Subagentは不要」ではなく、「Subagentとは別にシェルによる並列実行も依然として重要」になる。</p>
+      <p>今の使い分けはこう見る。定常運用で複数のレビュー委譲を速く回したいならシェルによる並列実行。Subagentなしでも、記事作成AIとレビューAIを分けて同時に走らせるユースケースは十分成立する。一方でSubagentは、失敗したレビューの切り分けや再試行前提の運用、レビュー前後の分岐のような、高制御なorchestratorとしてかなり扱いやすい。置き換え先というより、役割が違う道具として見るのがよさそう。</p>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span>© 2026 Ryo Manzoku</span>
+        <span><a href="/about/">About</a> · <a href="/work/">Work</a> · <a href="/articles/">Articles</a> · <a href="/contact/">Contact</a> · <a href="/llms.txt">llms.txt</a> · <a href="/sitemap.xml">sitemap</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

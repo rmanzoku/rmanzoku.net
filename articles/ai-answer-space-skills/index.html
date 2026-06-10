@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AIと「回答空間」の旅 - Ryo Manzoku / 満足亮</title>
+    <meta name="description" content="LLMを回答空間生成器として捉えると、prompt、review、複数モデル、Skillsの役割を一つの構造として説明できる。">
+    <link rel="canonical" href="https://rmanzoku.net/articles/ai-answer-space-skills/">
+    <link rel="stylesheet" href="/assets/site.css">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "AIと「回答空間」の旅",
+        "datePublished": "2026-03-09",
+        "dateModified": "2026-06-11",
+        "inLanguage": "ja",
+        "author": { "@type": "Person", "name": "Ryo Manzoku", "url": "https://rmanzoku.net/" },
+        "mainEntityOfPage": "https://rmanzoku.net/articles/ai-answer-space-skills/",
+        "url": "https://rmanzoku.net/articles/ai-answer-space-skills/",
+        "sameAs": ["https://x.com/rmanzoku/status/2030788646157324692"]
+      }
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="/">
+          <strong>Ryo Manzoku</strong>
+          <span>AI harness / business implementation</span>
+        </a>
+        <div class="nav-links">
+          <a href="/about/">About</a>
+          <a href="/work/">Work</a>
+          <a href="/articles/" aria-current="page">Articles</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page">
+      <p class="eyebrow">Articles</p>
+      <h1>AIと「回答空間」の旅</h1>
+      <p class="lead">prompt、review、Skillsを貫くAIの設計思想</p>
+      <p class="meta">Published: 2026-03-09 · First published on <a href="https://x.com/rmanzoku/status/2030788646157324692">X</a></p>
+
+      <h2>はじめに</h2>
+      <p>LLM を使っていると、不思議な現象に気づきます。曖昧な質問をすると、AI はだいたい「それっぽいが凡庸な答え」を返します。</p>
+      <p>たとえば「良いビジネスアイデアを教えて」と聞くと、AI を使った SaaS、マーケットプレイス、AI コンサル、ノーコードツールのような答えに寄りやすい。どれも間違ってはいませんが、特別新しいわけでもありません。</p>
+      <p>これは AI が怠けているわけではなく、LLM の構造から自然に起きる現象です。この現象を理解するには、AI の仕組みを少し違う視点で見る必要があります。</p>
+      <h2>LLM は「回答空間」を生成している</h2>
+      <p>LLM は質問に対して正解を計算しているわけではありません。実際には、質問に対してあり得る回答の集合のようなものを内部に生成しています。</p>
+      <p>たとえば「良いビジネスアイデア」という質問に対して、AI の内部では SaaS、AI ツール、コンサル、マーケットプレイス、教育サービスのような可能性が広がる。この回答の可能性の広がりを、ここでは回答空間と呼びます。厳密な研究用語ではなく、LLM の振る舞いを理解するための説明メタファーです。</p>
+      <p>LLM はこの回答空間の中から文章を生成しています。そう考えると、prompt や対話や review が何をしているのかを 1 本の線で説明しやすくなります。</p>
+      <h2>なぜ曖昧な質問は凡庸な答えになるのか</h2>
+      <p>質問が曖昧な場合、AI の内部では非常に広い回答空間が生成されます。すると AI は、その中でも最も典型的な回答を出しやすくなります。</p>
+      <p>広い回答空間<br />
+      ↓<br />
+      典型的な回答</p>
+      <p>これが AI が平均的な答えを出す理由です。雑な問いが雑な答えを呼ぶというより、広い問いが典型解を呼ぶと言った方が近いです。</p>
+      <h2>ペルソナは回答空間を移動させる</h2>
+      <p>AI にペルソナを与えると、回答の性質は大きく変わります。たとえば「優秀な Go エンジニアとして答えて」「経験豊富なデザイナーとして答えて」「スタートアップ投資家として評価して」のような指示です。</p>
+      <p>これを入れると AI の回答はかなり変わります。これは回答空間が移動しているためです。</p>
+      <p>一般的な回答空間<br />
+      ↓<br />
+      専門家の回答空間</p>
+      <p>言い換えると、ペルソナ指定は回答の質感を変えるテクニックではなく、どの空間を見に行くかを変える操作です。</p>
+      <h2>前提情報は回答空間を縮小する</h2>
+      <p>AI に背景、制約、目的、技術スタックを与えると、回答の質は大きく向上します。これは回答空間が狭くなるからです。</p>
+      <p>広い回答空間<br />
+      ↓<br />
+      制約追加<br />
+      ↓<br />
+      狭い回答空間</p>
+      <p>目的、読者、締切、既存方針、出力形式まで足すと、AI は「何でも答えられる状態」から「この条件で答える状態」に変わります。実務で prompt が効く理由の多くは、ここで説明できます。</p>
+      <h2>AIとの対話は回答空間の探索</h2>
+      <p>Chat UI で AI と対話しているとき、人間は無意識に次のことをしています。AI に回答を生成させる。それを読む。条件を追加する。再度生成する。これは回答空間の探索です。</p>
+      <p>生成<br />
+      ↓<br />
+      評価<br />
+      ↓<br />
+      条件追加<br />
+      ↓<br />
+      再生成</p>
+      <p>つまり AI との対話は、回答空間を旅しているとも言えます。対話が長くなるのは失敗ではなく、探索として見ると自然です。</p>
+      <h2>review は回答空間の絞り込みである</h2>
+      <p>ここに review を入れると、構造はさらに明確になります。生成だけでは空間は広がったままですが、批判や差分確認を入れると不要な方向を切り落とせます。review は回答空間の絞り込みです。</p>
+      <p>これは単一モデルの自己レビューが弱く見えやすい理由の説明にもなります。生成時の偏りとレビュー時の偏りが似やすいからです。だから生成役とレビュー役を分けた方が、別種の欠陥が見えやすくなります。</p>
+      <p>たとえば「新規事業の案を出して」で始めると、答えは広く、凡庸になりやすい。そこで「日本の B2B SaaS 企業向け」「1 人で 3 か月以内に試作可能」「既存顧客の解約率を下げるテーマ」と条件を足すと、空間はかなり狭まります。そのうえで別の AI に「この案の弱い前提を 3 つ挙げて」とレビューさせれば、さらに不要な案を落とせます。ここまでで、移動、縮小、探索、絞り込みが 1 本の流れとして見えてきます。</p>
+      <h2>マルチモデルで精度が上がる理由</h2>
+      <p>最近の AI 活用で重要なのが、複数モデルの組み合わせです。Codex、Claude、Gemini のように異なるモデルを組み合わせると、前提の違う批判や視点を得やすくなる場面があります。常に精度が上がるわけではありませんが、探索の偏りをずらせることはあります。</p>
+      <p>一般論として、それぞれのモデルは学習データ、訓練方法、推論スタイルが違います。つまり、生成する回答空間も違います。</p>
+      <p>Model A → 回答空間 A<br />
+      Model B → 回答空間 B<br />
+      Model C → 回答空間 C</p>
+      <p>複数モデルを使うと、探索できる回答空間が広がる場合があります。だからこそ、単独で閉じるより、別モデルの視点を 1 回挟んだ方が見落としの種類を変えやすい。</p>
+      <h2>AI相互レビューによる収束</h2>
+      <p>さらに重要なのが、異なるモデルによる相互レビューです。たとえば、モデル A が回答を書く。モデル B がレビューする。モデル A が修正する。これは次のような流れになります。</p>
+      <p>探索<br />
+      ↓<br />
+      批判<br />
+      ↓<br />
+      収束</p>
+      <p>単一モデルでは見えにくい欠陥が見えることがあります。ここで効いているのは、複数モデルを並べること自体ではなく、探索役と批判役を分けることです。</p>
+      <h2>Claude の「Skills」という発想</h2>
+      <p>ここで面白いのが、Anthropic が公開している Skills です。Anthropic の公式 docs では、Skills は「Claude の capabilities を extend する仕組み」として説明されています。同じ docs には subagents もあり、そちらは「specialized AI subagents for task-specific workflows and improved context management」と書かれています。</p>
+      <p>この 2 つを並べると、Anthropic が前に出しているのは単なる prompt 集ではありません。専門性を分け、仕事ごとの手順を持たせ、再利用可能な形で Claude に追加するという発想です。たとえば <code>pdf</code>、<code>docx</code>、<code>xlsx</code>、<code>pptx</code>、<code>frontend-design</code>、<code>webapp-testing</code> のような名前があります。これらは AI が特定の仕事を安定してこなすためのテンプレートであり、回答空間の操作として読むことができます。</p>
+      <h2>Anthropic Skills を分類してみる</h2>
+      <p>ここから先は、Anthropic が公開している Skill 記述をもとにした自分の整理です。公式分類ではありませんが、何を固定している Skill なのかを見るにはこの方が分かりやすいです。</p>
+      <p>1 つはドメイン特化型 Skill です。<code>pdf</code>、<code>docx</code>、<code>xlsx</code>、<code>pptx</code> のような Skill では、対象作業、処理方法、出力形式がかなり明示されています。たとえば <code>pdf</code> なら、読む、抽出する、結合する、OCR するといった扱い方が最初から前景化される。つまり作業の回答空間をかなり狭くしています。</p>
+      <p>もう 1 つはワークフロー型 Skill です。<code>webapp-testing</code> や <code>mcp-builder</code> は、作業手順そのものを固定する型と読めます。<code>webapp-testing</code> なら、まず状況を集めて、次に観察して、問題を切り分けて、最後に報告する、といった順序が前に出てきます。</p>
+      <p>Context gathering<br />
+      ↓<br />
+      Observation<br />
+      ↓<br />
+      Isolation<br />
+      ↓<br />
+      Report</p>
+      <p>これは思考プロセスの固定です。回答内容だけでなく、探索の順序まで定義しています。</p>
+      <p>もう 1 つはスタイル・創造型 Skill です。<code>algorithmic-art</code> や <code>frontend-design</code> は、回答空間を美学の方向へ移動させる Skill と読めます。ここでやっているのは、単に正解を狭めることではなく、どちら側の空間を優先するかを決めることです。</p>
+      <h2>Skill は回答空間の制御装置</h2>
+      <p>Anthropic Skills を見ると、共通した構造があります。Skill は回答空間の移動、回答空間の縮小、思考プロセスの固定を同時に行っています。</p>
+      <p>回答空間の移動<br />
+      ↓<br />
+      回答空間の縮小<br />
+      ↓<br />
+      思考プロセスの固定</p>
+      <p>つまり Skill は、回答空間を制御するテンプレートです。毎回うまくやってくれる魔法ではなく、自由度を扱いやすい形に整える仕組みだと見た方が実務には合います。</p>
+      <h2>回答空間と Skill と AI の組織化</h2>
+      <p>ここまで整理すると、AI を活用するシステムは役割分担を持つことが必須になってきます。アイデア生成 AI、実装 AI、レビュー AI、判断 AI。これはほとんど組織構造です。</p>
+      <p>企業でも、企画、開発、レビュー、意思決定という役割分担があります。AI システムも同じ方向に進み始めています。こうした役割分離の発想は、たとえば <a href="/articles/multi-ai-unix-philosophy/">単一AIではなく実行基盤で考える AI開発環境とUNIX哲学</a> で書いた、multi-AI を役割の集合として設計する考え方ともつながります。</p>
+      <p>つまり、単一の AI ではなく、役割の集合として設計するという発想です。どのモデルが最強かだけを見るより、どこを誰に担当させるかを見る方が実務では効きます。</p>
+      <h2>まとめ</h2>
+      <p>LLM を回答空間生成器として見ると、AI の使い方はかなり整理されます。ペルソナは移動、前提情報は縮小、対話は探索、review は絞り込み、複数モデルは視点の拡張、Skills は制御テンプレートです。だから実務では、単一の最強モデルを探すより、役割分担とレビュー設計を考える方が効きます。もちろんこの比喩だけで全部を説明できるわけではありませんが、AI を実務で扱うにはかなり使いやすい見方です。</p>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span>© 2026 Ryo Manzoku</span>
+        <span><a href="/about/">About</a> · <a href="/work/">Work</a> · <a href="/articles/">Articles</a> · <a href="/contact/">Contact</a> · <a href="/llms.txt">llms.txt</a> · <a href="/sitemap.xml">sitemap</a></span>
+      </div>
+    </footer>
+  </body>
+</html>
