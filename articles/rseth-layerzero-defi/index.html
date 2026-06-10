@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>rsETH / LayerZero 事件に見える DeFi の閉塞感 - Ryo Manzoku / 満足亮</title>
+    <meta name="description" content="rsETH / LayerZero $292M 流出を単発の bridge バグではなく、AI 時代の DeFi セクター全体の閉塞の一症例として読み解く市場分析。">
+    <link rel="canonical" href="https://rmanzoku.net/articles/rseth-layerzero-defi/">
+    <link rel="stylesheet" href="/assets/site.css">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "rsETH / LayerZero 事件に見える DeFi の閉塞感",
+        "datePublished": "2026-04-20",
+        "dateModified": "2026-06-11",
+        "inLanguage": "ja",
+        "author": { "@type": "Person", "name": "Ryo Manzoku", "url": "https://rmanzoku.net/" },
+        "mainEntityOfPage": "https://rmanzoku.net/articles/rseth-layerzero-defi/",
+        "url": "https://rmanzoku.net/articles/rseth-layerzero-defi/",
+        "sameAs": ["https://x.com/rmanzoku/status/2046143877477020120"]
+      }
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="/">
+          <strong>Ryo Manzoku</strong>
+          <span>AI harness / business implementation</span>
+        </a>
+        <div class="nav-links">
+          <a href="/about/">About</a>
+          <a href="/work/">Work</a>
+          <a href="/articles/" aria-current="page">Articles</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page">
+      <p class="eyebrow">Articles</p>
+      <h1>rsETH / LayerZero 事件に見える DeFi の閉塞感</h1>
+      <p class="meta">Published: 2026-04-20 · First published on <a href="https://x.com/rmanzoku/status/2046143877477020120">X</a></p>
+
+      <p>2026-04-18 に Kelp rsETH / LayerZero bridge で $292M が流出した。結論から言うと、この事件は単発の bridge バグではなく、AI 時代の DeFi 全体の閉塞が露出した一症例として読める。</p>
+      <p>技術的な破断面も、組織的な破断面も、経済的な破断面も、ひとつの方向に揃って出ている。それぞれを単体で見れば局所的なミスだが、重ねると「リーダーの野心的アップデートに周辺のステークホルダーが追従できず、攻撃者のインセンティブだけが上回っている」状態が浮かぶ。この記事では、事件を発端に DeFi セクターの閉塞を仮説として提示し、処方箋の骨格を 4 層に分けて整理する。</p>
+      <p>ここで閉塞と呼ぶときの判定条件を先に 3 つ置く。1 つ目は、防御側の年間投資が攻撃者の期待値に桁で追いついていないこと。2 つ目は、リーダーの設計進化に運用側の人的リソースが追従できていないこと。3 つ目は、off-chain の運用境界（RPC、鍵、バイナリ整合性）がプロトコル横断の業界標準として定義されていないこと。今回の事件はこの 3 条件のいずれにもあてはまる。</p>
+      <h2>事件の構造</h2>
+      <p>2026-04-18 17:35:35 UTC に Kelp rsETH OFT Adapter が 116,500 rsETH、約 $292M 相当を不正発行した。これは流通量のおよそ 18% にあたる。攻撃者はこの rsETH を Aave V3（Ethereum / Arbitrum）の eMode に担保投入し、WETH / wstETH を借り出して現金化した。</p>
+      <p>2026-04-20 04:20 UTC に LayerZero Labs が公開した詳細 post-mortem により、root cause は次のように確定している。Lazarus Group / TraderTraitor による DVN 下流の RPC infrastructure poisoning、具体的には独立運用されていた 2 つの op-geth ノードのバイナリ swap と DDoS による failover 誘導である。</p>
+      <p>つまり、DVN の暗号鍵、protocol logic、DVN 自身のコード、いずれも破られていない。全て仕様通りに動作したうえで、「偽の事実」を渡された DVN が正規の署名を出した。</p>
+      <p>正規の message flow と今回の破断面を並べるとこうなる。</p>
+      <pre><code class="language-text">送信元 chain                  Ethereum mainnet
+    │                               │
+    │ 正規 OApp が PacketSent       │
+    ▼                               ▼
+ DVN (1-of-1) ─ 正規 attestation ─▶ ULN302 / EndpointV2
+                                         │
+                                         ▼
+                                    rsETH OFT Adapter
+                                    _credit（burn と 1:1 対応）
+</code></pre>
+      <pre><code class="language-text">攻撃者                         Ethereum mainnet
+    │                               │
+    │ DDoS + op-geth バイナリ swap  │
+    ▼                               ▼
+ DVN (1-of-1) ─ 偽 RPC データで正規署名 ─▶ ULN302 / EndpointV2
+                                         │
+                                         ▼
+                                    rsETH OFT Adapter
+                                    _credit（burn なし、116,500 rsETH 解放）
+</code></pre>
+      <p>OFT の核は、送信元の burn と受信側の mint / release を 1 対 1 で対応させ、総量を保存することにある。今回は送信元 burn を伴わない偽造メッセージで受信側の _credit のみが成立した。invariant の破綻は OFT コードではなく、DVN が依存する off-chain の RPC 信頼境界で起きている。</p>
+      <p>Kelp 側の OFT 設定では、要求される DVN の数が 1 本しかない。業界の本番環境では 2-of-3 や 3-of-5 が一般的で、ether.fi (weETH) は Nethermind と LayerZero Labs の 2-of-2 で無傷だった。Kelp はこの設定を 2025-01 の警告以降、15 ヶ月放置していた。</p>
+      <p>この事件は、1 本の検証器と 1 つの RPC 信頼境界が同時に折れたときに何が起きるかを示した。折れた本当の理由は config と off-chain 運用側にある。</p>
+      <h2>下流の市場で何が起きたか</h2>
+      <p>Kelp 側の直接被害は $292M だが、下流の Aave ではそれを上回る規模が動いた。</p>
+      <p>最大の波及先は Aave V3 Ethereum と Arbitrum の WETH 市場で、bad debt は $177-200M、24 時間の Aave TVL 流出は $5.4-6.6B、DeFi 全体 TVL 流出は約 $10.5B、AAVE トークンは -17.9% まで下げた。Aave 自身は exploit されておらず、構造的には「支払い能力は残っているが、流動性の先着順ゲームで引き出しが詰まった」solvent run である。</p>
+      <p>焦点は、同じ LayerZero OFT を採用している他の LRT が無事だったことではなく、Aave の側で対応余力が既に限られていた点にある。Aave は rsETH / wrsETH の freeze、WETH 借入金利の引き下げ、Umbrella backstop の起動を短時間で打っているが、これらは正規の crisis response であって、構造的な脆さを直す動きではない。</p>
+      <p>予防・設計勝ちのプロトコルは比較的早期に通常運用へ戻った。Ethena は 6 時間 pause から再開、Morpho は isolated markets の性質上ほぼ影響なし、SparkLend は freeze / delist で切り離し、USDT0 は Tether 独自 DVN と LayerZero Labs DVN の 2-of-2 構成で一切影響を受けていない。冗長と分離を事前に払った側が、事後の費用を払わずに済んだ。</p>
+      <p>AAVE トークンの戻りが鈍い状況が事件後も続いていることから、市場は今回を一過性の流動性不足ではなく、同型の事件がしばらく続く前提での reprice として読んでいる可能性が高い。single-event としてではなくシリーズの第 1 弾として処理している参加者が一定数いる、という読み方が事件後の価格挙動と整合する。</p>
+      <h2>攻撃と防御の経済的非対称</h2>
+      <p>閉塞感の第 1 面は経済である。</p>
+      <p>攻撃者の期待値は、流出額と洗浄成功率にほぼ比例し、攻撃コストはほぼゼロに近い。筆者の調査レポート（2026-04-19 付、Kelp / LayerZero 事件の 4 モデル並列調査）の試算では、洗浄成功率をほぼ 1、攻撃コストを $1M オーダー、流出額を $292M と置いた場合、攻撃側 ROI はおよそ 250-500 倍になる。防御側は DVN 多重化、HSM、rate limit、継続監査などに DeFi 全体で年間 $5-10M 規模を払う想定で、予想損失比の 5% 程度に収まる。数字自体は桁の推定で精度は高くないが、攻撃 ROI が防御コスト比を桁で上回るという不等式は、前提を広めに動かしても壊れにくい。</p>
+      <p>TVL 当たりの security 人員比も、長期トレンドで悪化している。</p>
+      <pre><code class="language-text">時期          DeFi TVL      $ / security 人
+2020 年末      ~$20B         $40-80M
+2022 年末      ~$40B         $15-25M
+2024 年末      ~$100B        ~$30M
+2026 年 4 月   ~$150B        ~$50M
+</code></pre>
+      <p>2022 年末が security 人員の手厚さでは最も余裕があった時期で、そこから 2026 年 4 月までに TVL 当たりの人員比は 2-3 倍悪化している。AI で monitoring は助けられるが、何を監視すべきか決める判断、crisis response の分岐、governance 交渉は人間の役割として残る。</p>
+      <p>攻撃側と防御側の非対称は、1 回の事件の損益ではなく均衡の問題として読むべきだ。合理的な攻撃者のインセンティブが合理的な防御者のそれを上回り、それが単発ではなく常態として定着しつつある。この段階では、攻撃を 1 件減らすより、攻撃面そのものを縮める方が割が合う。</p>
+      <h2>組織の空洞化と 15 ヶ月放置</h2>
+      <p>閉塞感の第 2 面は組織である。</p>
+      <p>Aave では 2026 年の 2 ヶ月間に、3 つの主要 contributor が立て続けに離脱している。時系列を並べるとこうなる。</p>
+      <pre><code class="language-text">2026-02-20    BGD Labs 離脱
+2026-03-03    ACI 離脱
+2026-04-06    Chaos Labs 離脱
+2026-04-18    Kelp / LayerZero exploit
+</code></pre>
+      <p>Kelp の事件は、Chaos Labs 離脱のちょうど 12 日後に起きた。Chaos Labs + Block Analitica + LlamaRisk の 3 つの risk curator 体制は、事件時点で LlamaRisk 単独に集約されていた。Chaos Labs は V4 の運用費用として $8M を要求したが、DAO 側は $5M を提示して合意に至らなかった。</p>
+      <p>この空洞化は設計と運用を切り離す。Aave V4 は account abstraction、hub-and-spoke、cross-chain ネイティブなど、V3 よりも secure な設計を目指している。だが V4 を安全に運用できる人的リソースは、離脱の連鎖で V3 以下に減った。設計は進化したのに、運用できる人が残っていないという逆転が起きている。</p>
+      <p>同じ構図は Kelp 側にも見える。2025-01 に複数 DVN 化を warning された後、Kelp は 15 ヶ月にわたってこの設定を触らなかった。TVL $1.5-2B に成長した protocol で「動いているコードを触らない」判断が勝ったわけだが、これも組織的には合理的だった可能性が高い。config の変更は監査コストとオペレーションリスクを伴い、かつ改善効果は「何もない時間」として観測される。</p>
+      <p>個別の判断としては合理的で、集合の水準では防御が劣化する。古典的な共有地の問題で、DeFi security は protocol 横断の public good だが、各 protocol は自社 security にしか予算を割けない。</p>
+      <h2>閉塞の説明モデル</h2>
+      <p>ここからは確定事実ではなく説明モデルとしての仮説で、閉塞の因果連鎖を 3 つに分けて置く。各仮説の末尾で、今回の事件とどうつながるかを一文ずつ添える。</p>
+      <p>1 つ目は、AI ブームが crypto 側から人材・資本・関心を間接的に吸い上げた、という構造である。VC の運用余資は 2024-2025 に AI 側へ強く寄り、crypto native の security 企業（CertiK、PeckShield、SlowMist、Chaos Labs など）は AI 側との人材単価競争で不利になった。具体例として、2024 年末の Hexagate 買収では、従来 crypto native だった security 企業が Chainalysis の中に入る形になった。AI が exploit を直接見つけたから攻撃コストが下がった、というより、AI が防御側の体力を削る間接圧力になった、と読むほうが事件との説明力は強い。今回の Kelp / Aave は、Chaos Labs の離脱と $8M / $5M の予算不一致という形で、この圧力の末端が出ている。</p>
+      <p>2 つ目は、リーダーと追従者の乖離である。リーダー（Aave V4、Kelp の推奨設定、LayerZero の推奨 DVN 構成）は先に進もうとするが、周辺のステークホルダー（risk curator、OApp 運用者、下流プロトコル）が追従できない。Aave の V4 と curator 離脱、Kelp の 1-of-1 放置、共有 DVN を required 1 本にする default は、どれもこの乖離を別の角度から映している。今回の事件は、Kelp 側の設計変更が 15 ヶ月かけても追従されなかったという事実そのものが、この仮説の直接証拠になる。</p>
+      <p>3 つ目は、共有地の悲劇と時間的不整合の重なりである。DeFi security は protocol 横断の public good だが、各 protocol は自社 security にしか予算を割かない。短期的には「動いているコードを触らない」が合理的で、長期的には攻撃面が指数的に広がる。個別合理的な判断の積み重ねが、集合的に防御を劣化させている。今回の事件では、DVN の下流 RPC の整合性という protocol 横断の公共財が誰にも保守されていなかった、という形で表れた。</p>
+      <p>この 3 つに、国家を後ろ盾とした攻撃主体が off-chain の運用基盤まで標的にできる成熟度が乗った。Lazarus / TraderTraitor が op-geth のバイナリを swap し、DDoS で failover を誘導した事実は、crypto security が「コード」と「鍵」だけでは済まないフェーズに入ったことを示している。冗長化も分離も、off-chain の運用層まで届いていないと意味を持たない。</p>
+      <p>この段階で閉塞感は技術の言葉として使える。TVL は増え、設計は高度化し、監視は AI で強化されているのに、全体としての防御は相対的に弱くなっている。特定のプロトコルが無能なわけでも、特定の攻撃者が異常なわけでもない。均衡が動いていないだけだ。</p>
+      <h2>formal verification 単独では足りない</h2>
+      <p>同じ事件に対する先行仮説として、formal verification を唯一の現実的防御とする主張がある。元 NEAR コアの @zacodil が事件直後に出した thesis に代表されるが、要点は「AI が静的解析コストを 100 倍下げた、完璧なコードを書くコストは据え置き、したがって formal verification が標準になるまで DeFi は暗黒期に入る」という直接因果モデルだ。</p>
+      <p>この主張は logic bug 系の事件には強い。Euler Finance 2023、Nomad 2022、DAO 2016 は、どれも不変条件の漏れや境界条件の扱いミスで、仕様を先に書いて検証すれば防げた。</p>
+      <p>2026 年近年の大規模事件の主因は logic bug ではない。整理するとこうなる。</p>
+      <pre><code class="language-text">事件                             原因類型                    FV で防げたか
+Kelp rsETH 2026-04 ($292M)       config + off-chain infra   否
+Bybit 2025-02 (~$1.5B)           UI / 社会工学              否
+WazirX 2024 (~$230M)             multisig signer compromise 否
+DMM Bitcoin 2024 (~$300M)        signer key 漏洩            否
+Ronin 2022 ($625M)               validator 鍵 compromise    否
+Euler 2023 ($197M)               logic bug                  可
+Nomad 2022 ($190M)               logic bug                  可
+</code></pre>
+      <p>Kelp については、ULN302、EndpointV2、OFT Adapter、DVN のコードは全て仕様通りに動いた。破綻したのは Kelp の OApp 設定と、DVN が依存する下流 RPC の信頼境界である。FV はコードが仕様通り動くことを証明する道具なので、仕様（1-of-1 DVN）自体が安全かどうかと、off-chain の RPC データが真かどうかは scope 外になる。</p>
+      <p>したがって zacodil 型の「FV が唯一の現実的防御」は、config / 鍵 / off-chain infrastructure 系の事件には射程が届かない。FV は Layer 1 としては残すが、単独では閉塞を解けない。</p>
+      <h2>閉塞脱出の条件</h2>
+      <p>閉塞脱出の処方箋は 4 層に分けて整理するのが扱いやすい。</p>
+      <pre><code class="language-text">Layer 1    Contract-level Formal Verification
+  │        logic bug 系に有効、config と off-chain には届かない
+  ▼
+Layer 2    Protocol-level Config &amp; Off-chain Infrastructure
+  │        multi-DVN、rate limit、HSM / MPC、
+  │        op-geth バイナリ署名検証、TEE、
+  │        DVN と observability の情報源分離、
+  │        DDoS 検知→pause
+  ▼
+Layer 3    Ecosystem-level Security Economy
+  │        EigenLayer AVS slashing、Symbiotic restaking、
+  │        Morpho 型 isolated markets、insurance market の厚み
+  ▼
+Layer 4    Macro-level Human Capital
+           DAO treasury の retention インセンティブ、
+           crypto native security 人材の育成、
+           bus factor 管理
+</code></pre>
+      <p>今回の事件で最も欠けたのは Layer 2、特に off-chain インフラ整合性である。DVN の下流 RPC の binary 整合性を署名付きで検証する、DVN と observability 基盤の RPC を分離する、DDoS 検知を failover ではなく pause に変える、といった設計判断はどれも技術的には難しくない。業界標準として定着していないだけだ。</p>
+      <p>Layer 3 はすでに一部で動いている。EigenLayer AVS や Symbiotic の restaking は経済的ペナルティの導入として前進しており、Morpho 型 isolated markets は Aave 型 shared pool のリスク伝播問題を構造で回避している。</p>
+      <p>Layer 4 が最も時間のかかる領域になる。human capital の逼迫は単年度の予算で解ける話ではなく、人材の育成、retention、外部化の組み合わせを DAO governance に組み込む必要がある。Hexagate の Chainalysis 買収は外部化の 1 例として扱えるが、全面外部化は crypto native の文化を希薄化させる副作用があり、扱いが難しい。</p>
+      <p>閉塞脱出のシナリオは、おおまかに段階的悪化、自己改革、外部 rescue の 3 パターンが考えられる。段階的悪化では Kelp 級の事件が年に数回続き、TVL $100-150B で頭打ちになる。自己改革では EigenLayer / Symbiotic の成熟と AI native security tooling の逆輸入、insurance market の expand で防御側経済が retooling される。外部 rescue では TradFi 規制の backstop 義務化と、Anthropic / Google / Stripe 等の AI-security as a service が crypto に入ってくる。</p>
+      <p>最も可能性が高いのは段階的悪化から自己改革へのハイブリッドで、2-3 年の適応期を見ておく感覚が現実的だ。この期間は Kelp 級の事件が複数回起きる前提で、個人の運用、protocol の設計、DAO governance の優先順位を組み替える局面に入る。</p>
+      <h2>まとめ</h2>
+      <p>rsETH / LayerZero の事件は閉塞の第 1 弾で、同型の事件は 2-3 年のあいだに複数回起きる前提で動くのが現実的だ。protocol 側は Layer 2 の off-chain インフラ整合性、DVN の多重化、RPC 境界の署名検証を優先度の上に置く。DAO 側は risk curator の retention と後任不在時の bus factor を governance 議題に上げる。利用者側は、単一の bridge / LRT / curator に集中した露出を見直す。formal verification は Layer 1 としては残るが、閉塞を解く律速は Layer 2 以降に移っている。</p>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span>© 2026 Ryo Manzoku</span>
+        <span><a href="/about/">About</a> · <a href="/work/">Work</a> · <a href="/articles/">Articles</a> · <a href="/contact/">Contact</a> · <a href="/llms.txt">llms.txt</a> · <a href="/sitemap.xml">sitemap</a></span>
+      </div>
+    </footer>
+  </body>
+</html>
