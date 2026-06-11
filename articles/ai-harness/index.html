@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AI Harness - Ryo Manzoku / 満足亮</title>
-    <meta name="description" content="AI harness、回答空間、正本、artifact、人間承認を使って、AIが実務で働ける環境を設計する考え方。">
+    <meta name="description" content="LLMが開く回答空間を、目的、正本、制約、検証、reviewで実務に使える範囲へ制御する作業環境がAI harness。AI活用の本体は、promptを一回書くことではなく、AIが働ける環境を育てること。">
     <link rel="canonical" href="https://rmanzoku.net/articles/ai-harness/">
     <link rel="stylesheet" href="/assets/site.css">
   </head>
@@ -27,16 +27,24 @@
       <p class="eyebrow">Articles</p>
       <h1>AI Harness</h1>
       <p class="lead">
-        AI harnessとは、AIがどの情報を読み、何を信じ、どこまで動き、何を残し、どこで止まるかを定義する作業環境です。
+        AI活用の本体は、良いpromptを一回書くことではなく、AIが働ける環境を育てることです。その作業環境をハーネスと呼んでいます。
       </p>
-      <p class="meta">Last updated: 2026-06-10</p>
+      <p class="meta">Last updated: 2026-06-11</p>
+
+      <h2>The Answer Space</h2>
+      <p>
+        LLMは正解を計算する機械というより、問いに対するありうる回答の広がりを開き、その中から出力する装置です。この広がりを回答空間と呼んでいます。厳密な研究用語ではなく、実務でLLMの挙動を理解するためのメタファーです。
+      </p>
+      <p>
+        曖昧な問いは広い回答空間を開き、AIは典型的で平均的な答えに寄ります。モデルを変えても同じ種類の失敗が残るとき、問題はモデルの賢さではなく、回答空間の制御にあります。
+      </p>
 
       <h2>Definition</h2>
       <p>
-        LLMは、問いに対する回答空間を開き、その中からもっともらしい出力を返します。曖昧な問いは広い回答空間を開き、AIは平均的な答えに寄りやすくなります。
+        ハーネスとは、AIがどの情報を読み、何を信じ、どこまで動き、何を残し、どこで止まるかを定義する作業環境です。目的はどの方向の空間を開くかを決め、正本は何を信じるかを固定し、制約は不要な候補を落とし、検証とreviewは残す候補と落とす候補を分けます。
       </p>
       <p>
-        実務でAIに良い仕事をさせるには、モデルを選ぶだけでは足りません。目的、正本、制約、権限、外部文脈、検証、review、人間承認を組み合わせて、回答空間を収束させる必要があります。
+        これはpromptを長くする話ではありません。むしろ、毎回promptに全部書かなくて済むように、読むべきもの、守るべきルール、確認すべき条件を環境側に置く話です。
       </p>
 
       <h2>Components</h2>
@@ -51,32 +59,50 @@
           <tbody>
             <tr>
               <td>Context</td>
-              <td>AIが作業に必要な背景、制約、用語、判断基準。</td>
+              <td>AIが作業に必要な背景、制約、用語、判断基準。回答空間をどの方向に開くかを決める。</td>
             </tr>
             <tr>
               <td>Source of Record</td>
-              <td>AIが信じるべき正本。古い要約や作業メモと分離する。</td>
+              <td>AIが信じるべき正本。古い要約や作業メモと分離し、何を信じるかを固定する。</td>
             </tr>
             <tr>
               <td>Artifacts</td>
-              <td>diff、ログ、テスト結果、レビュー、decision recordなどの証跡。</td>
+              <td>diff、ログ、テスト結果、レビュー、decision recordなどの証跡。口頭の完了報告の代わりに、収束の判断材料になる。</td>
             </tr>
             <tr>
               <td>Bounded Autonomy</td>
-              <td>AIに任せる範囲と、人間に戻す停止線。</td>
+              <td>AIに任せる範囲と、人間に戻す停止線。AIは不可逆な失敗の痛みを自分のものとして持たないため、損害の深さで線を引く。</td>
             </tr>
             <tr>
               <td>Review</td>
-              <td>探索、生成、批判、修正、承認を分ける品質ゲート。</td>
+              <td>探索、生成、批判、修正、承認を分ける品質ゲート。広がった回答空間を採用できる成果物へ絞り込む。</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <h2>Practical Claim</h2>
+      <h2>Growing the Harness</h2>
       <p>
-        AI活用の本体は、良いpromptを一回書くことではありません。AIが働ける環境を育てることです。
+        ハーネスは一度作って終わりではありません。最初は簡単な作業フォルダで十分で、目的、正本、制約、出力形式、完了条件を置きます。うまくいった依頼は再利用できる手順にし、失敗したらルール、テスト、承認ゲートを更新します。
       </p>
+      <p>
+        これは組織の業務をAIが扱える形に翻訳していく作業であり、<a href="/articles/ai-bpo/">AI-BPO / FDE</a>の仕事そのものです。チャットだけでAIを使うと毎回同じ説明を繰り返しますが、ハーネスを育てると、AIは次回も同じ文脈で再開できます。
+      </p>
+
+      <h2>Boundaries</h2>
+      <p>
+        ハーネスはAIを強くする装置ではなく、安心して任せられる範囲を定義する装置です。可逆で低リスクな作業は積極的に自動化し、不可逆で損害の深い判断は人間の停止線として残します。この分担の設計は<a href="/articles/ai-agents/">AI Agent Operations</a>で扱います。
+      </p>
+
+      <h2>Related Articles</h2>
+      <p>この考え方の背景は、次の公開記事に書いています。</p>
+      <ul class="fact-list">
+        <li><a href="/articles/ai-answer-space-skills/">AIと「回答空間」の旅</a> — 回答空間という見方の出発点</li>
+        <li><a href="/articles/multi-ai-unix-philosophy/">単一AIではなく実行基盤で考える</a> — 役割分離とartifactをUNIX哲学から整理</li>
+        <li><a href="/articles/ai-dev-environment-mbp/">MBP M5 Maxを買ったのでAI開発環境を棚卸しした</a> — ハーネスの実運用例</li>
+        <li><a href="/articles/claude-md-views/">CLAUDE.md、下から見るか？横から見るか？</a> — コンテキスト設計の実務</li>
+      </ul>
+      <p>関連する正準ページ: <a href="/articles/ai-bpo/">AI-BPO / FDE</a> ・ <a href="/articles/ai-agents/">AI Agent Operations</a></p>
     </main>
 
     <footer class="site-footer">
@@ -87,4 +113,3 @@
     </footer>
   </body>
 </html>
-

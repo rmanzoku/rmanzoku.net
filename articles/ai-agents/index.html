@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AI Agent Operations - Ryo Manzoku / 満足亮</title>
-    <meta name="description" content="複数AI、CLI runner、review、artifactを組み合わせたAIエージェント運用の考え方。">
+    <meta name="description" content="単一AIにすべてを任せず、探索、生成、レビュー、判断、承認を分けるAIエージェント運用。役割分離とartifactで収束させ、不可逆な判断は人間の停止線に残す。">
     <link rel="canonical" href="https://rmanzoku.net/articles/ai-agents/">
     <link rel="stylesheet" href="/assets/site.css">
   </head>
@@ -29,14 +29,23 @@
       <p class="lead">
         AIエージェント運用では、単一AIにすべてを任せず、探索、生成、レビュー、判断、承認を分けます。
       </p>
-      <p class="meta">Last updated: 2026-06-10</p>
+      <p class="meta">Last updated: 2026-06-11</p>
+
+      <h2>Why Roles Are Split</h2>
+      <p>
+        単一AIで完結させると、生成の癖もレビューの観点も、そのモデル1つに引っ張られます。生成時の偏りとレビュー時の偏りは似やすく、自己レビューでは同じ種類の欠陥が残ります。探索役と批判役を分けると、別の種類の欠陥が見えるようになります。
+      </p>
+      <p>
+        効いているのは、複数のモデルを並べること自体ではなく、役割を分けることです。どのモデルが最強かより、どこを誰に担当させるかを見ます。
+      </p>
 
       <h2>Operating Model</h2>
       <p>
-        複数AIを役割ごとに分け、CLI runnerやsubagentで呼び出し、request、response、summary、failure artifactを残します。これにより、何を依頼し、何が返り、どこで失敗したかをあとから検証できます。
+        複数AIを役割ごとに分け、CLI runnerやsubagentで呼び出し、request、response、summary、failure artifactを残します。これにより、何を依頼し、何が返り、どこで失敗したかをあとから検証できます。口頭の「やりました」ではなく、diff、ログ、テスト結果、reviewで判断します。
       </p>
 
       <h2>Patterns</h2>
+      <p>運用では次の型を使います。</p>
       <ul class="fact-list">
         <li>探索役と批判役を分ける。</li>
         <li>親エージェントは統合判断に集中し、実作業ロールを委譲する。</li>
@@ -45,10 +54,22 @@
         <li>不可逆な判断は人間承認に戻す。</li>
       </ul>
 
-      <h2>Why It Matters</h2>
+      <h2>The Human Line</h2>
       <p>
-        AIは速く、局所最適に強い一方で、未来の変更、運用、責任、不可逆な失敗の痛みを自分ごととして持ちません。エージェント運用の設計では、この限界を前提に、どこで人間が判断するかを明示します。
+        AIは速く、反復を恐れず、局所最適に強い。一方で、未来の変更、運用、責任、不可逆な失敗の痛みを自分のものとして持ちません。だから仕様の確定、不可逆な操作、最終承認は人間の停止線として残します。
       </p>
+      <p>
+        AIに任せる範囲が広がるほど、人間の役割は実装者から、未来のコンテキストを持つ判断者へ寄っていきます。エージェント運用の設計とは、この分担を<a href="/articles/ai-harness/">ハーネス</a>として明文化することです。
+      </p>
+
+      <h2>Related Articles</h2>
+      <p>この運用の背景は、次の公開記事に書いています。</p>
+      <ul class="fact-list">
+        <li><a href="/articles/multi-ai-unix-philosophy/">単一AIではなく実行基盤で考える</a> — 役割分離と実行基盤の設計</li>
+        <li><a href="/articles/subagent-review-orchestration/">Subagentはいつ使うべきか</a> — 並列実行とorchestratorの実測比較</li>
+        <li><a href="/articles/future-context/">未来のコンテキスト</a> — 人間に残る判断の正体</li>
+      </ul>
+      <p>関連する正準ページ: <a href="/articles/ai-harness/">AI Harness</a> ・ <a href="/articles/ai-bpo/">AI-BPO / FDE</a></p>
     </main>
 
     <footer class="site-footer">
@@ -59,4 +80,3 @@
     </footer>
   </body>
 </html>
-

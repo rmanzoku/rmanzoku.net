@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AI-BPO / FDE - Ryo Manzoku / 満足亮</title>
-    <meta name="description" content="AI-BPOとFDEを、現場業務をAIが実行できる形に翻訳する仕事として定義します。">
+    <meta name="description" content="AI-BPOとFDEを、現場業務をAIが実行できる形に翻訳する仕事として定義する。LLMで下がったのはツールの作り込みコストで、現場の暗黙知を要件にする作業は残る。価値の中心はそこに移っている。">
     <link rel="canonical" href="https://rmanzoku.net/articles/ai-bpo/">
     <link rel="stylesheet" href="/assets/site.css">
   </head>
@@ -29,17 +29,28 @@
       <p class="lead">
         AI-BPO/FDEの価値は、AIに詳しいことではなく、現場の業務、制約、判断基準をAIが実行できる形に翻訳することです。
       </p>
-      <p class="meta">Last updated: 2026-06-10</p>
+      <p class="meta">Last updated: 2026-06-11</p>
 
       <h2>Definition</h2>
       <p>
-        AI-BPOは、バックオフィス、営業事務、見積、問い合わせ、レビューなどの業務を、AIと人間承認を組み合わせた運用へ移す実務です。
+        AI-BPOは、バックオフィス、営業事務、見積、問い合わせ、レビューなどの業務を、AIと人間承認を組み合わせた運用へ移す実務です。売るのはAIではなく、業務が楽になる状態です。納品物の主役はAIではなく、業務に組み込まれた小さなツールやワークフローで、利用者にAIリテラシーを求めません。
+      </p>
+
+      <h2>Why Now</h2>
+      <p>
+        LLMで大きく下がったのは、ツールを作り込むコストです。以前ならエンジニア2人月かかった小さな業務ツールが、現実的なコストで作れるようになりました。
       </p>
       <p>
-        FDEは肩書きではなく、現場の制約とAIの実行形式をつなぐ役割です。業務を観察し、判断基準を言語化し、例外と停止線を設計し、AIが扱えるartifactとして残します。
+        一方で、現場の暗黙知を要件にする作業は下がっていません。何をなんと呼び、どこに正本があり、何をもって確認済みとし、どの例外を人に戻すか。これは現場に入って観察し、言語化するしかない作業です。作るコストが下がったぶん、価値の中心はこの翻訳の作業に移っています。
+      </p>
+
+      <h2>FDE as a Translator</h2>
+      <p>
+        FDEは肩書きではなく、現場の制約とAIの実行形式をつなぐ役割です。業務を観察し、判断基準を言語化し、例外と停止線を設計し、AIが扱えるartifactとして残します。これは<a href="/articles/ai-harness/">ハーネス</a>を業務の現場で育てる作業そのものです。
       </p>
 
       <h2>Principles</h2>
+      <p>実務では次の原則で設計します。</p>
       <ul class="fact-list">
         <li>売るのはAIではなく、業務が楽になる状態。</li>
         <li>決定論的に書ける処理はコード、曖昧な解釈はAI、不可逆な判断は人間。</li>
@@ -52,6 +63,14 @@
       <p>
         資料回収、請求前確認、問い合わせ分類、月次レポート、見積前提整理、FAQ更新、議事録からのタスク抽出など、下ごしらえと人間承認が分けやすい業務が対象です。
       </p>
+
+      <h2>Related Articles</h2>
+      <p>この仕事が重要になる背景は、次の公開記事に書いています。</p>
+      <ul class="fact-list">
+        <li><a href="/articles/ai-internet-justice/">AIがインターネットの正義を決める</a> — AIが業務と購買の入口になる構造変化</li>
+        <li><a href="/articles/future-context/">未来のコンテキスト</a> — AIに任せたあとも人間に残る判断</li>
+      </ul>
+      <p>関連する正準ページ: <a href="/articles/ai-harness/">AI Harness</a> ・ <a href="/articles/ai-agents/">AI Agent Operations</a></p>
     </main>
 
     <footer class="site-footer">
@@ -62,4 +81,3 @@
     </footer>
   </body>
 </html>
-
