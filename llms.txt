@@ -29,6 +29,10 @@ Former roles:
 - Articles: https://rmanzoku.net/articles/
 - Contact: https://rmanzoku.net/contact/
 
+## Contact
+
+The public contact route for Ryo Manzoku is agent@rmanzoku.net. Social accounts are official profiles, not the primary contact route.
+
 ## Published articles
 
 Full text published on this site. Each article links to its first publication on X.
@@ -69,4 +73,3 @@ Full text published on this site. Each article links to its first publication on
 ## Positioning
 
 Ryo Manzoku focuses on practical AI implementation in business operations and management. The central claim is that useful AI systems require not only strong models but also context, source of record, constraints, tools, review, artifacts, and human judgment.
-
