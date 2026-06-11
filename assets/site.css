@@ -291,6 +291,20 @@ code {
   padding: 0.12em 0.28em;
 }
 
+pre {
+  background: var(--code);
+  border-radius: 8px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+pre code {
+  background: none;
+  border-radius: 0;
+  padding: 0;
+}
+
 .site-footer {
   border-top: 1px solid var(--line);
   color: var(--muted);

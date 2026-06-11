@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>単一AIではなく実行基盤で考える AI開発環境とUNIX哲学 - Ryo Manzoku / 満足亮</title>
+    <meta name="description" content="AI開発環境は単一モデルの比較ではなく、役割分離された実行基盤として設計した方が安定する。registry / resolver、worktree、UNIX哲学で分解して構成する考え方。">
+    <link rel="canonical" href="https://rmanzoku.net/articles/multi-ai-unix-philosophy/">
+    <link rel="stylesheet" href="/assets/site.css">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "単一AIではなく実行基盤で考える AI開発環境とUNIX哲学",
+        "datePublished": "2026-03-16",
+        "dateModified": "2026-06-11",
+        "inLanguage": "ja",
+        "author": { "@type": "Person", "name": "Ryo Manzoku", "url": "https://rmanzoku.net/" },
+        "mainEntityOfPage": "https://rmanzoku.net/articles/multi-ai-unix-philosophy/",
+        "url": "https://rmanzoku.net/articles/multi-ai-unix-philosophy/",
+        "sameAs": ["https://x.com/rmanzoku/status/2033327561279946787"]
+      }
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="/">
+          <strong>Ryo Manzoku</strong>
+          <span>AI harness / business implementation</span>
+        </a>
+        <div class="nav-links">
+          <a href="/about/">About</a>
+          <a href="/work/">Work</a>
+          <a href="/articles/" aria-current="page">Articles</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page">
+      <p class="eyebrow">Articles</p>
+      <h1>単一AIではなく実行基盤で考える AI開発環境とUNIX哲学</h1>
+      <p class="meta">Published: 2026-03-16 · First published on <a href="https://x.com/rmanzoku/status/2033327561279946787">X</a></p>
+
+      <p>AI コーディングツールを使い始めると、すぐに「どのモデルが強いか」より厄介な問題にぶつかります。複数の AI をどう分業させ、どうつなぎ、どこでレビューさせるか。つまり、開発環境そのものをどう設計するかです。</p>
+      <p>結論から言うと、AI 開発環境は単一の AI ではなく、役割を分けた複数の AI と実行基盤として設計した方が安定します。ここで言う安定とは、レビュー観点を分離しやすく、途中成果物を追跡しやすく、責務衝突を切り分けやすいという意味です。</p>
+      <h2>単一AIの限界</h2>
+      <p>単一 AI で完結させると、生成の癖も、レビューの観点も、そのモデル 1 つに引っ張られます。</p>
+      <p>コードを書く能力と、設計を疑う能力と、差分を判定する能力は同じではありません。ここを 1 つのモデルにまとめると、出力の方向も失敗の仕方も似てきます。</p>
+      <p>ここで言う回答空間とは、ある問いに対して AI が出しうる答えの広がりです。問いが曖昧なほど回答空間は広くなり、単一モデルだけで閉じると最も典型的な答えに寄りやすくなります。だからこそ、生成だけで閉じず、review と role 分離を入れた実行基盤が効きます。</p>
+      <p>この記事自体も単一の AI で一気に整えたのではなく、複数の AI でレビューしています。実際、この原稿の review では、ある reviewer は「マルチ AI の方が安定する」という主張の根拠不足を指摘し、別の reviewer は UNIX 哲学の導入部の言い換えが重なっていると指摘しました。単一 AI で生成と自己レビューをまとめていた段階では、この 2 種類の欠陥は十分に分離されませんでした。</p>
+      <p>これは generate / review / fix を分けると、生成時には見えなかった別種の欠陥が review 側で露出しやすくなるからです。同じ原稿でも、review という役割を生成から分離し、さらに reviewer を複数モデルに分けると、別の観点からの指摘を取り込みやすくなります。</p>
+      <p>単一 AI の構造は単純です。</p>
+      <pre><code class="language-text">Issue
+  │
+  ▼
+Model
+  │
+  ▼
+Output
+</code></pre>
+      <p>この形は速いですが、生成のあとに別の視点が入りません。短い探索、使い捨てスクリプト、設計責務が薄い作業ならこれでも十分です。逆に、設計判断、レビュー観点、並行作業が増えると、単一 AI だけでは不安定さが目立ちます。</p>
+      <h2>必要なのはモデルではなく層</h2>
+      <p>AI 開発環境を一般化すると、必要なのは 1 つの賢い画面ではありません。少なくとも次の 5 層です。</p>
+      <pre><code class="language-text">Human
+  │
+  ▼
+Entry UI
+  │
+  ▼
+Orchestrator
+  │
+  ▼
+Resolver
+  │
+  ▼
+Runtime / Workspace
+</code></pre>
+      <ul>
+      <li><code>Entry UI</code>: 人間が issue を渡し、結果を確認する入口</li>
+      <li><code>Orchestrator</code>: issue を分解して role ごとの仕事にする</li>
+      <li><code>Resolver</code>: role に応じて model や policy を解決する</li>
+      <li><code>Runtime</code>: 実際に AI を動かす層</li>
+      <li><code>Workspace</code>: 各 issue の作業場所を分離する層</li>
+      </ul>
+      <p>任意の管理 UI でよいのですが、自分の環境では Conductor をこの <code>Entry UI</code> として使っています。Conductor は自分が使っている管理 UI / 入口であって、execution fabric、つまり実行基盤全体そのものではありません。実際の責務は、下の Orchestrator、Resolver、Runtime、Workspace に分かれています。</p>
+      <p>この順序で見ると、Conductor のような固有ツールはあくまで 1 つの実装例です。先に抽象的な層を定義しておけば、UI を差し替えても実行基盤の設計は崩れません。</p>
+      <h2>なぜ role と resolver を分けるのか</h2>
+      <p>役割分離が効くのは、AI の仕事が 1 種類ではないからです。</p>
+      <pre><code class="language-text">Issue
+  │
+  ▼
+Orchestrator
+  │
+  ▼
+Role
+  │
+  ▼
+Resolver
+  │
+  ▼
+Runtime
+</code></pre>
+      <p>ここで重要なのは、Skill が直接モデル名を知らなくてもよいことです。Skill は <code>reviewer</code> や <code>implementer</code> のような role を表現します。Resolver はその role を受け取り、registry を引いて対応する model を解決します。</p>
+      <pre><code class="language-yaml">skill: review
+role: reviewer
+</code></pre>
+      <p>Resolver はこの role を受けて、たとえば次のような registry entry から実モデルを解決します。</p>
+      <pre><code class="language-yaml">role: reviewer
+model: codex
+</code></pre>
+      <pre><code class="language-yaml">role: implementer
+model: claude
+</code></pre>
+      <p>こうしておくと、モデル変更がコード変更ではなく運用変更になります。generate に向く model、review に向く model、fix に向く model を、registry / resolver 経由で切り替えられるからです。</p>
+      <p>具体的には、Orchestrator が 1 つの issue を <code>implementer</code> と <code>reviewer</code> に分け、Resolver が <code>reviewer</code> に対して review 向きの model を割り当てます。単一 AI では 1 つの偏りに引っ張られるところを、role と model の分離で崩せます。</p>
+      <h2>なぜ UNIX 哲学と相性がいいのか</h2>
+      <p>UNIX 哲学との相性が良い理由は単純です。UNIX は、小さな道具を分け、共通 interface でつなぎ、途中結果を観察可能に保つ設計だからです。</p>
+      <p>今回の文脈では、少なくとも次の 3 原則が効きます。</p>
+      <ol>
+      <li>役割を小さく分ける  </li>
+      <li>file / CLI を安定 interface にする  </li>
+      <li>artifact を残して再実行可能にする  </li>
+      </ol>
+      <p>Bell Labs の UNIX 論文では、pipe は ordinary file と同じ read / write の規約で扱える channel として説明されます。Ritchie と Thompson の "The UNIX Time-Sharing System"（1974）や、Ritchie の retrospective でも、shell、I/O redirection、pipes が user interface の基礎として語られています。つまり UNIX の強さは、大きな統合アプリではなく、単純な接続規約にあります。</p>
+      <p>この 3 原則を AI 実行基盤に当てはめると、構造はこうなります。</p>
+      <pre><code class="language-text">CLI / Shell
+  │
+  ▼
+planner / coder / reviewer / tester
+  │
+  ▼
+issue.md / plan.md / patch.diff / report.md
+</code></pre>
+      <p>例えば <code>cat issue.md | plan-agent &gt; plan.md</code> のように計画を作り、<code>plan.md</code> をもとに <code>patch.diff</code> を生成し、その結果を <code>report.md</code> に残す、という流れです。AI を賢いコマンドとして扱い、成果物を file として残す形です。途中の <code>plan.md</code> を人間が書き換えてから次に進めることもできるので、全自動と手動介入の境界も保ちやすくなります。</p>
+      <p>この形が良いのは、途中結果を確認しやすく、再実行しやすく、置き換えもしやすいからです。artifact が残っていれば、どの reviewer が何を指摘し、どの patch がどう変わったかを追えます。ここに registry / resolver を組み合わせると、UI と execution fabric を分けたまま運用できます。</p>
+      <h2>運用では workspace 分離が効く</h2>
+      <p>AI を使うと複数の issue を同時に処理したくなります。ただし、複雑な開発を完全並列で安全に進めるには、まだ責務衝突が起きやすいです。</p>
+      <p>だから基本原則はこれです。</p>
+      <pre><code class="language-text">1 issue = 1 workspace
+</code></pre>
+      <p>既存 repo と履歴を共有したいなら worktree を使い、依存や権限を完全に切り離したいなら別 repository を使います。Conductor を入口として使う理由の 1 つも、この workspace 分離を扱いやすいからです。</p>
+      <p>git worktree は単なる Git の小技ではありません。AI ごとに workspace を分ける isolation layer です。複数の issue を同時に扱うなら、この分離がないと差分も責務も混ざります。逆に worktree を分けておくと、reviewer は patch を見ることに集中でき、implementer は別 issue の変更に引きずられにくくなります。</p>
+      <p>単一 AI で十分な場面はあります。しかし、review 観点を分けたい、複数の role を並行させたい、作業途中の artifact を残したい、という瞬間から、単一 AI より multi-role な execution fabric の方が安定します。</p>
+      <p>最小構成で始めるなら、入口 UI は何でもよく、artifact は file に残し、reviewer は generator と分ける。この 3 点だけでも、単一 AI で閉じる運用よりかなり扱いやすくなります。</p>
+      <h2>まとめ</h2>
+      <p>AI 開発環境は、単一 AI かどうかよりも、役割分離された実行基盤として設計されているかどうかで安定性が変わります。</p>
+      <p>見るべき対象は model 単体ではなく、<code>entry UI / orchestrator / resolver / runtime / workspace</code> の接続です。Conductor はその入口になりえますが、本質は UI ではありません。小さな role、file / CLI の共通 interface、artifact を残して再実行可能にする運用です。</p>
+      <p>UNIX 哲学は古い比喩ではなく、いまの AI 開発環境を設計する時にもそのまま効きます。大きなアプリとして閉じるより、小さく分けて、つないで、残す。その方が multi-AI はうまく動きます。</p>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span>© 2026 Ryo Manzoku</span>
+        <span><a href="/about/">About</a> · <a href="/work/">Work</a> · <a href="/articles/">Articles</a> · <a href="/contact/">Contact</a> · <a href="/llms.txt">llms.txt</a> · <a href="/sitemap.xml">sitemap</a></span>
+      </div>
+    </footer>
+  </body>
+</html>
