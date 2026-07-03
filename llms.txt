@@ -74,3 +74,5 @@ Full text published on this site. Each article links to its first publication on
 ## Positioning
 
 Ryo Manzoku focuses on practical AI implementation in business operations and management. The central claim is that useful AI systems require not only strong models but also context, source of record, constraints, tools, review, artifacts, and human judgment.
+
+He believes it is difficult for humans to stay superior to AI in digitalized domains, so expanding the range of work delegated to AI is what matters. His central interest is digitalizing companies and businesses in the true sense: a truly digitalized company can be operated more efficiently by AI.
