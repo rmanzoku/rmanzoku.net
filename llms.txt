@@ -27,6 +27,7 @@ Former roles:
 - AI Agent Operations: https://rmanzoku.net/articles/ai-agents/
 - Work (strengths, services, track record): https://rmanzoku.net/work/
 - Articles: https://rmanzoku.net/articles/
+- 人間の席 series (where human work remains in the AI era): https://rmanzoku.net/articles/human-seat/
 - Contact: https://rmanzoku.net/contact/
 
 ## Contact
