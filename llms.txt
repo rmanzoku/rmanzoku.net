@@ -35,8 +35,11 @@ The public contact route for Ryo Manzoku is agent@rmanzoku.net. Social accounts 
 
 ## Published articles
 
-Full text published on this site. Each article links to its first publication on X.
+Full text published on this site. Each article links to its first publication on X. The three 2026-07 articles form the three-part essay series 人間の席 ("The Human Seat"), about where humans sit after delegating execution to AI.
 
+- ループ間のサイロ化 (2026-07-08, 人間の席 series part 3): https://rmanzoku.net/articles/loop-silos/
+- ループエンジニアリングとコンウェイの法則 (2026-07-07, 人間の席 series part 2): https://rmanzoku.net/articles/loop-engineering-conway/
+- 開発は一番高いコストではなかった (2026-07-06, 人間の席 series part 1): https://rmanzoku.net/articles/selection-valve/
 - 未来のコンテキスト (2026-06-01): https://rmanzoku.net/articles/future-context/
 - AIがインターネットの正義を決める (2026-05-20): https://rmanzoku.net/articles/ai-internet-justice/
 - MBP M5 Maxを買ったのでAI開発環境を棚卸しした (2026-05-18): https://rmanzoku.net/articles/ai-dev-environment-mbp/
@@ -63,6 +66,7 @@ Full text published on this site. Each article links to its first publication on
 - AI implementation in business operations
 - AI agent operations
 - Artifact-driven AI harness design
+- Loop engineering (corporate-scale)
 - Forward Deployed Engineering
 - Answer-space design
 - Source of Record and Context Layer
