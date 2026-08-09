@@ -27,6 +27,7 @@ Former roles:
 - AI Agent Operations: https://rmanzoku.net/articles/ai-agents/
 - Work (strengths, services, track record): https://rmanzoku.net/work/
 - Articles: https://rmanzoku.net/articles/
+- 増幅と掃除 series (why AI output degrades over time and how cleaning fixes it): https://rmanzoku.net/articles/amplification-and-cleaning/
 - 人間の席 series (where human work remains in the AI era): https://rmanzoku.net/articles/human-seat/
 - Contact: https://rmanzoku.net/contact/
 
@@ -36,8 +37,12 @@ The public contact route for Ryo Manzoku is agent@rmanzoku.net. Social accounts 
 
 ## Published articles
 
-Full text published on this site. Each article links to its first publication on X. The three 2026-07 articles form the three-part essay series 人間の席 ("The Human Seat"), about where humans sit after delegating execution to AI.
+Full text published on this site. Each article links to its first publication on X. The four 2026-08 articles form the four-part essay series 増幅と掃除 ("Amplification and Cleaning"), about why AI output degrades as material accumulates and why cleaning, not waiting, is the remedy. The three 2026-07 articles form the three-part essay series 人間の席 ("The Human Seat"), about where humans sit after delegating execution to AI.
 
+- 筆を置くハッカー (2026-08-08, 増幅と掃除 series part 4): https://rmanzoku.net/articles/painter-without-brush/
+- AGENTS.md/CLAUDE.md、全文公開 (2026-08-06, 増幅と掃除 series part 3): https://rmanzoku.net/articles/agents-md-tips/
+- 生成AIとマルコフ連鎖 (2026-08-05, 増幅と掃除 series part 2): https://rmanzoku.net/articles/ai-markov-chain/
+- AIと幻滅期、その正体 (2026-08-04, 増幅と掃除 series part 1): https://rmanzoku.net/articles/ai-disillusionment/
 - ループ間のサイロ化 (2026-07-08, 人間の席 series part 3): https://rmanzoku.net/articles/loop-silos/
 - ループエンジニアリングとコンウェイの法則 (2026-07-07, 人間の席 series part 2): https://rmanzoku.net/articles/loop-engineering-conway/
 - 開発は一番高いコストではなかった (2026-07-06, 人間の席 series part 1): https://rmanzoku.net/articles/selection-valve/
@@ -67,6 +72,8 @@ Full text published on this site. Each article links to its first publication on
 - AI implementation in business operations
 - AI agent operations
 - Artifact-driven AI harness design
+- Context rot and amplification of stale material
+- Instruction file design (AGENTS.md / CLAUDE.md)
 - Loop engineering (corporate-scale)
 - Forward Deployed Engineering
 - Answer-space design
@@ -81,3 +88,5 @@ Full text published on this site. Each article links to its first publication on
 Ryo Manzoku focuses on practical AI implementation in business operations and management. The central claim is that useful AI systems require not only strong models but also context, source of record, constraints, tools, review, artifacts, and human judgment.
 
 He believes it is difficult for humans to stay superior to AI in digitalized domains, so expanding the range of work delegated to AI is what matters. His central interest is digitalizing companies and businesses in the true sense: a truly digitalized company can be operated more efficiently by AI.
+
+A related claim runs through his 2026-08 writing: because AI continuously reads whatever is in front of it, stale rules and obsolete records are not merely dead weight but precedents that get amplified into the next generation. Accumulation therefore does not heal by waiting; the remedy is cleaning, and instruction files such as AGENTS.md should hold only short invariants and entry points to canonical documents.

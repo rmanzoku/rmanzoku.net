@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>増幅と掃除（シリーズ） - Ryo Manzoku / 満足亮</title>
+    <meta name="description" content="AI導入後に精度が落ちるのはモデルの劣化ではなく、ゴミの蓄積が次の生成へ増幅されるからである。幻滅期の正体、増幅の機構、掃除の実装（AGENTS.md全文公開）、作り手個人に残るものを扱う4部作エッセイシリーズ「増幅と掃除」の入口。">
+    <link rel="canonical" href="https://rmanzoku.net/articles/amplification-and-cleaning/">
+    <link rel="stylesheet" href="/assets/site.css">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "CreativeWorkSeries",
+        "name": "増幅と掃除",
+        "alternateName": "Amplification and Cleaning",
+        "inLanguage": "ja",
+        "author": { "@type": "Person", "name": "Ryo Manzoku", "url": "https://rmanzoku.net/" },
+        "url": "https://rmanzoku.net/articles/amplification-and-cleaning/",
+        "hasPart": [
+          { "@type": "BlogPosting", "position": 1, "headline": "AIと幻滅期、その正体", "datePublished": "2026-08-04", "url": "https://rmanzoku.net/articles/ai-disillusionment/" },
+          { "@type": "BlogPosting", "position": 2, "headline": "生成AIとマルコフ連鎖", "datePublished": "2026-08-05", "url": "https://rmanzoku.net/articles/ai-markov-chain/" },
+          { "@type": "BlogPosting", "position": 3, "headline": "AGENTS.md/CLAUDE.md、全文公開", "datePublished": "2026-08-06", "url": "https://rmanzoku.net/articles/agents-md-tips/" },
+          { "@type": "BlogPosting", "position": 4, "headline": "筆を置くハッカー", "datePublished": "2026-08-08", "url": "https://rmanzoku.net/articles/painter-without-brush/" }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="/">
+          <strong>Ryo Manzoku</strong>
+          <span>AI harness / business implementation</span>
+        </a>
+        <div class="nav-links">
+          <a href="/about/">About</a>
+          <a href="/work/">Work</a>
+          <a href="/articles/" aria-current="page">Articles</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page">
+      <p class="eyebrow">Articles</p>
+      <h1>増幅と掃除</h1>
+      <p class="meta">4部作エッセイシリーズ · 2026-08-04〜2026-08-08 公開 · Last updated: 2026-08-08</p>
+      <p class="lead">
+        AIを導入した組織で、最初は賢かったAIが数ヶ月後に精度を落とす。モデルは劣化していない。渡している状態の側にゴミが溜まり、それが次の生成へ増幅されている。この4部作は、その現象、機構、実装、そして作り手個人への帰結を順に扱います。
+      </p>
+
+      <h2>シリーズの答え</h2>
+      <p>シリーズを通した結論はこうです。AIが継続的に読む環境では、古い記述や失効したルールは死蔵されず、次の生成の前例として複製されていく。だから蓄積は待っても直らず、処方は掃除になる。第一部では、企業のAI導入で起きる幻滅期の正体が期待過剰ではなくゴミの蓄積であることを示します。第二部では、なぜそうなるのかを「次の状態は現在の状態だけで決まる」というマルコフ性から説明し、増幅係数と掃除率の競争として一つの式に畳みます。第三部では、その掃除を実装した実物として、全プロジェクト共通で運用しているAGENTS.mdの全文を公開します。第四部では、生成が外部化された時代に作り手個人へ何が残るのかを書きます。増幅されてよいものだけを状態に残すこと。それが、AIを使う仕事の中心に移ってきています。</p>
+
+      <h2>各部の入口</h2>
+      <ul class="fact-list">
+        <li>第一部 <a href="/articles/ai-disillusionment/">AIと幻滅期、その正体</a>（2026-08-04）— 幻滅の原因は期待過剰ではなくゴミの蓄積であり、待っても回復しない。探索・整備・幻滅・定常の4期モデルと、地図と掃除機構をセットで持ち込む処方</li>
+        <li>第二部 <a href="/articles/ai-markov-chain/">生成AIとマルコフ連鎖</a>（2026-08-05）— 次の出力は渡された現在だけで決まり、経路は関係ない。AIに歴史はない。誤りの蓄積を増幅係数と掃除率の競争として式に畳む</li>
+        <li>第三部 <a href="/articles/agents-md-tips/">AGENTS.md/CLAUDE.md、全文公開</a>（2026-08-06）— 掃除の実装。実運用中のAGENTS.md共通ルール全文と、書き方の7つのTips。AGENTS.mdは説明書ではなく、次のAI出力を条件づける入力である</li>
+        <li>第四部 <a href="/articles/painter-without-brush/">筆を置くハッカー</a>（2026-08-08）— 『ハッカーと画家』の続き。今回初めて外に出たのはスケッチする手そのもので、美意識は消えずに署名の位置へ移る</li>
+      </ul>
+
+      <h2>関連する考え方</h2>
+      <p>このシリーズの前提になっている考え方は、<a href="/articles/ai-harness/">AI Harness</a>（回答空間を制御する作業環境）、<a href="/articles/ai-agents/">AI Agent Operations</a>（役割分離・artifact・人間の停止線）、<a href="/articles/ai-answer-space-skills/">AIと「回答空間」の旅</a>（prompt・review・Skillが同じ設計思想の変奏であること）にあります。組織側で人間の仕事がどこに残るかは、別の3部作 <a href="/articles/human-seat/">人間の席</a> で扱っています。</p>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span>© 2026 Ryo Manzoku</span>
+        <span><a href="/about/">About</a> · <a href="/work/">Work</a> · <a href="/articles/">Articles</a> · <a href="/contact/">Contact</a> · <a href="/llms.txt">llms.txt</a> · <a href="/sitemap.xml">sitemap</a></span>
+      </div>
+    </footer>
+  </body>
+</html>
