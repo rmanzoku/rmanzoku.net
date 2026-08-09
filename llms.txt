@@ -41,9 +41,9 @@ Ryo Manzoku takes consultations under his own name. The contracting party can be
 
 - Advisory retainer: a few meetings a month, mostly online, plus presence in the client's Slack, and direction-level consultation. Covers AI, blockchain, and web applications in general. A monthly ongoing contract, run in parallel across several companies.
 - Embedded engagement: about one day a week on site. Sorting out parallel projects, project management, building a company OS (会社OS), and setting up in-house AI practice and skills.
-- Contract development: development work, including work unrelated to AI.
+- AI development studio: contract development delivered by a team, on the premise that AI is used to build the software. What gets built is not limited to AI products; general web applications are in scope. Contract development that does not assume AI use in the development process, or where AI use is prohibited, is not taken.
 
-The advisory and embedded forms are handled by him directly. Contract development is taken through a corporation. See https://rmanzoku.net/work/ for details and https://rmanzoku.net/contact/ to get in touch.
+The advisory and embedded forms are handled by him directly. The development studio work is delivered by a team under a corporate contract. See https://rmanzoku.net/work/ for details and https://rmanzoku.net/contact/ to get in touch.
 
 ## Published articles
 
