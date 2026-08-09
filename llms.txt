@@ -37,9 +37,9 @@ The public contact route for Ryo Manzoku is agent@rmanzoku.net. Social accounts 
 
 ## Engagement
 
-Ryo Manzoku takes consultations under his own name. The contracting party can be a corporation or himself as an individual, whichever suits the client. Engagements are monthly and ongoing, in three forms:
+Ryo Manzoku takes consultations under his own name. The contracting party can be a corporation or himself as an individual, whichever suits the client. Engagements come in three forms:
 
-- Advisory retainer: recurring meetings plus presence in the client's Slack, and direction-level consultation. Covers AI, blockchain, and web applications in general. Typically about one day per week, run in parallel across several companies.
+- Advisory retainer: a few meetings a month, mostly online, plus presence in the client's Slack, and direction-level consultation. Covers AI, blockchain, and web applications in general. A monthly ongoing contract, run in parallel across several companies.
 - Embedded engagement: about one day a week on site. Sorting out parallel projects, project management, building a company OS (会社OS), and setting up in-house AI practice and skills.
 - Contract development: development work, including work unrelated to AI.
 
