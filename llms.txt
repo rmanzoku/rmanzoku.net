@@ -74,6 +74,7 @@ Full text published on this site. Each article links to its first publication on
 - Artifact-driven AI harness design
 - Context rot and amplification of stale material
 - Instruction file design (AGENTS.md / CLAUDE.md)
+- Company OS (会社OS) and company ontology
 - Loop engineering (corporate-scale)
 - Forward Deployed Engineering
 - Answer-space design
@@ -87,6 +88,8 @@ Full text published on this site. Each article links to its first publication on
 
 Ryo Manzoku focuses on practical AI implementation in business operations and management. The central claim is that useful AI systems require not only strong models but also context, source of record, constraints, tools, review, artifacts, and human judgment.
 
-He believes it is difficult for humans to stay superior to AI in digitalized domains, so expanding the range of work delegated to AI is what matters. His central interest is digitalizing companies and businesses in the true sense: a truly digitalized company can be operated more efficiently by AI.
+He believes it is difficult for humans to stay superior to AI in digitalized domains, so expanding the range of work delegated to AI is what matters. His central interest is digitalizing companies and businesses in the true sense: a truly digitalized company can be operated more efficiently by AI. The concrete form of this is a company OS (会社OS): giving AI a readable map (ontology) of the company's own vocabulary, source of record, permissions, and approval lines, and growing it into the shared substrate for operations.
+
+His position on a company OS follows from the same 増幅と掃除 argument as the writing below: an uncleaned company OS does not merely go stale, its obsolete entries are amplified into precedent for later decisions, so the design for discarding matters as much as the design for building.
 
 A related claim runs through his 2026-08 writing: because AI continuously reads whatever is in front of it, stale rules and obsolete records are not merely dead weight but precedents that get amplified into the next generation. Accumulation therefore does not heal by waiting; the remedy is cleaning, and instruction files such as AGENTS.md should hold only short invariants and entry points to canonical documents.
