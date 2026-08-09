@@ -29,7 +29,7 @@
       <p class="lead">
         AI活用の本体は、良いpromptを一回書くことではなく、AIが働ける環境を育てることです。その作業環境をハーネスと呼んでいます。
       </p>
-      <p class="meta">Last updated: 2026-06-11</p>
+      <p class="meta">Last updated: 2026-08-08</p>
 
       <h2>The Answer Space</h2>
       <p>
@@ -89,6 +89,17 @@
         これは組織の業務をAIが扱える形に翻訳していく作業であり、<a href="/articles/ai-bpo/">AI-BPO / FDE</a>の仕事そのものです。チャットだけでAIを使うと毎回同じ説明を繰り返しますが、ハーネスを育てると、AIは次回も同じ文脈で再開できます。
       </p>
 
+      <h2>Cleaning the Harness</h2>
+      <p>
+        ハーネスは育てるだけでは劣化します。AIは渡された状態を等しく前例として読むため、失効したルールも古い判断ログも、死蔵されずに次の生成へ複製されていきます。従来の技術的負債は将来の変更コストでしたが、AIが継続的に読む環境では、次の生成へ増幅される負債が加わります。
+      </p>
+      <p>
+        だから蓄積は待っても回復せず、処方は掃除になります。誤りが積もるかどうかは、前例が複製される速さと、失効した記述が実際に削除される速さの競争で決まります。掃除の速度が増幅の速度を下回った時点から、状態は静かに濁り始めます。
+      </p>
+      <p>
+        実務としては、ルールの変更を「新しいルールの追加」と「古いルールの削除」で1つの変更として扱うこと、例外には適用範囲と解除条件を必ず添えること、検出できるものはvalidatorやhookで機械検査に落とすことです。状態全体の健全性は、会話履歴を持たない新しいセッションが現在の正本だけで代表的な作業を完了できるか、というコールドスタートの成功率で測れます。この機構と実装はシリーズ<a href="/articles/amplification-and-cleaning/">増幅と掃除</a>で扱っています。
+      </p>
+
       <h2>Boundaries</h2>
       <p>
         ハーネスはAIを強くする装置ではなく、安心して任せられる範囲を定義する装置です。可逆で低リスクな作業は積極的に自動化し、不可逆で損害の深い判断は人間の停止線として残します。この分担の設計は<a href="/articles/ai-agents/">AI Agent Operations</a>で扱います。
@@ -101,8 +112,12 @@
         <li><a href="/articles/multi-ai-unix-philosophy/">単一AIではなく実行基盤で考える</a> — 役割分離とartifactをUNIX哲学から整理</li>
         <li><a href="/articles/ai-dev-environment-mbp/">MBP M5 Maxを買ったのでAI開発環境を棚卸しした</a> — ハーネスの実運用例</li>
         <li><a href="/articles/claude-md-views/">CLAUDE.md、下から見るか？横から見るか？</a> — コンテキスト設計の実務</li>
+        <li><a href="/articles/agents-md-tips/">AGENTS.md/CLAUDE.md、全文公開</a> — 実運用中の指示ファイル全文と、書き方の7つのTips</li>
+        <li><a href="/articles/ai-markov-chain/">生成AIとマルコフ連鎖</a> — 増幅と掃除の競争を一つの式に畳む</li>
+        <li><a href="/articles/ai-disillusionment/">AIと幻滅期、その正体</a> — 組織のAI導入で同じ機構が起こす幻滅期</li>
       </ul>
       <p>関連する正準ページ: <a href="/articles/ai-bpo/">AI-BPO / FDE</a> ・ <a href="/articles/ai-agents/">AI Agent Operations</a></p>
+      <p>関連するシリーズ: <a href="/articles/amplification-and-cleaning/">増幅と掃除</a>（状態の劣化と掃除） ・ <a href="/articles/human-seat/">人間の席</a>（AI時代に人間の仕事はどこに残るか）</p>
     </main>
 
     <footer class="site-footer">
