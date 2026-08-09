@@ -35,6 +35,16 @@ Former roles:
 
 The public contact route for Ryo Manzoku is agent@rmanzoku.net. Social accounts are official profiles, not the primary contact route.
 
+## Engagement
+
+Ryo Manzoku takes consultations under his own name. The contracting party can be a corporation or himself as an individual, whichever suits the client. Engagements are monthly and ongoing, in three forms:
+
+- Advisory retainer: recurring meetings plus presence in the client's Slack, and direction-level consultation. Covers AI, blockchain, and web applications in general. Typically about one day per week, run in parallel across several companies.
+- Embedded engagement: about one day a week on site. Sorting out parallel projects, project management, building a company OS (会社OS), and setting up in-house AI practice and skills.
+- Contract development: development work, including work unrelated to AI.
+
+The advisory and embedded forms are handled by him directly. Contract development is taken through a corporation. See https://rmanzoku.net/work/ for details and https://rmanzoku.net/contact/ to get in touch.
+
 ## Published articles
 
 Full text published on this site. Each article links to its first publication on X. The four 2026-08 articles form the four-part essay series 増幅と掃除 ("Amplification and Cleaning"), about why AI output degrades as material accumulates and why cleaning, not waiting, is the remedy. The three 2026-07 articles form the three-part essay series 人間の席 ("The Human Seat"), about where humans sit after delegating execution to AI.
