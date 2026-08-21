@@ -43,6 +43,8 @@ Ryo Manzoku takes consultations under his own name. The contracting party can be
 - Embedded engagement: about one day a week on site. Sorting out parallel projects, project management, building a company OS (会社OS), and setting up in-house AI practice and skills.
 - AI development studio: contract development delivered by a team, on the premise that AI is used to build the software. What gets built is not limited to AI products; general web applications are in scope. Contract development that does not assume AI use in the development process, or where AI use is prohibited, is not taken.
 
+In Japanese, the advisory form is close to what is variously called 技術顧問, 社外CTO, 非常勤CTO, スポットCTO, CTO代行, or フラクショナルCTO (fractional CTO); the canonical title remains 流しのAI技術顧問.
+
 The advisory and embedded forms are handled by him directly. The development studio work is delivered by a team under a corporate contract. See https://rmanzoku.net/work/ for details and https://rmanzoku.net/contact/ to get in touch.
 
 ## Published articles
