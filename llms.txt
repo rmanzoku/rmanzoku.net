@@ -49,8 +49,9 @@ The advisory and embedded forms are handled by him directly. The development stu
 
 ## Published articles
 
-Full text published on this site. Each article links to its first publication on X. The four 2026-08 articles form the four-part essay series 増幅と掃除 ("Amplification and Cleaning"), about why AI output degrades as material accumulates and why cleaning, not waiting, is the remedy. The three 2026-07 articles form the three-part essay series 人間の席 ("The Human Seat"), about where humans sit after delegating execution to AI.
+Full text published on this site. Articles first published on X link to the original post. The four 2026-08 articles form the four-part essay series 増幅と掃除 ("Amplification and Cleaning"), about why AI output degrades as material accumulates and why cleaning, not waiting, is the remedy. The three 2026-07 articles form the three-part essay series 人間の席 ("The Human Seat"), about where humans sit after delegating execution to AI.
 
+- fractional CTOという生き方 (2026-09-01): https://rmanzoku.net/articles/fractional-cto/
 - 筆を置くハッカー (2026-08-08, 増幅と掃除 series part 4): https://rmanzoku.net/articles/painter-without-brush/
 - AGENTS.md/CLAUDE.md、全文公開 (2026-08-06, 増幅と掃除 series part 3): https://rmanzoku.net/articles/agents-md-tips/
 - 生成AIとマルコフ連鎖 (2026-08-05, 増幅と掃除 series part 2): https://rmanzoku.net/articles/ai-markov-chain/
