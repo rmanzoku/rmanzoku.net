@@ -2,6 +2,15 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J1JF71NBG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-0J1JF71NBG');
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>単一AIではなく実行基盤で考える AI開発環境とUNIX哲学 - Ryo Manzoku / 満足亮</title>
     <meta name="description" content="AI開発環境は単一モデルの比較ではなく、役割分離された実行基盤として設計した方が安定する。registry / resolver、worktree、UNIX哲学で分解して構成する考え方。">
