@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>fractional CTOという生き方 - Ryo Manzoku / 満足亮</title>
+    <meta name="description" content="AIが実行を安くしたあと、技術リーダーに残るのは誰が決め、誰が止め、誰が損をするかの設計。CTOの報酬は繰延で、AIと遠いExitがその期待値を崩した。誠実な形は十分な株を持つフルコミットか、期限付きオーナーシップを持つfractional CTOの二つ。fractional論争の軸を時間からexposureへ移す当事者のエッセイ。">
+    <link rel="canonical" href="https://rmanzoku.net/articles/fractional-cto/">
+    <link rel="stylesheet" href="/assets/site.css">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "fractional CTOという生き方",
+        "datePublished": "2026-09-01",
+        "dateModified": "2026-09-01",
+        "inLanguage": "ja",
+        "author": { "@type": "Person", "name": "Ryo Manzoku", "url": "https://rmanzoku.net/" },
+        "mainEntityOfPage": "https://rmanzoku.net/articles/fractional-cto/",
+        "url": "https://rmanzoku.net/articles/fractional-cto/"
+      }
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="/">
+          <strong>Ryo Manzoku</strong>
+          <span>AI harness / business implementation</span>
+        </a>
+        <div class="nav-links">
+          <a href="/about/">About</a>
+          <a href="/work/">Work</a>
+          <a href="/articles/" aria-current="page">Articles</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page">
+      <p class="eyebrow">Articles</p>
+      <h1>fractional CTOという生き方</h1>
+      <p class="meta">株を持たないCTOと、期限付きオーナーシップ · Published: 2026-09-01</p>
+
+      <h2>CTOは時間で分割できるか</h2>
+      <p>この夏、技術リーダーの席をめぐる文章が立て続けに出た。Gergely Orosz は <a href="https://newsletter.pragmaticengineer.com/p/the-great-engineering-leader-career-break">CTO や VP of Engineering が次の仕事を決めずに辞めていく現象</a>を 20 人ほどへの取材から書き、理由の一つに「フルタイムより fractional CTO を選ぶ」を挙げている（この要因は記事の有料部分にあり、公開されているのは見出しまでである）。国内では<a href="https://www.keisuke69.net/entry/2026/05/06/095729">「フラクショナルCTO」という言葉への違和感</a>という記事が書かれていて、CTO はオーナーシップが前提の役割なのに時間で分割できる前提になっていることがしっくりこない、満たさないなら技術顧問と呼ぶ方が誠実だ、という主張だった。同じ記事には、英語のラベルとしては Fractional CTO を使い、日本語では名乗らないという使い分けも書かれている。その一方で、<a href="https://gradion.com/ja/solutions/interim-leadership/fractional-cto">責任を負う非常勤 CTO</a>を商品として掲げる会社も現れている。</p>
+      <p>ブロックチェーンゲームの会社で代表取締役 CTO をしていた私が、いま何をしているのかと聞かれることが増えた。2025 年に代表を退き、いまは流しのAI技術顧問を名乗って複数の会社に入りながら、自分の会社の代表でもある。つまりあの違和感の対象そのものであり、この文章は当事者の弁明から始まる。ただ、弁明を書き進めるうちに、疑われている側と疑っている側が同じ前提に立っていて、その前提から反対の結論が出ることに気づいた。fractional CTO という生き方を、ここでは時間を分割して責任を薄める働き方、つまり株を持たない CTO の意味で仮に置いておくが、終わりまでにこの語の指す先が変わる。</p>
+
+      <h2>AIが残したのは、決める、止める、損をする仕事</h2>
+      <p>コード生成、レビュー、運用の相当部分は AI に寄った。Orosz の取材に出てくる founder は 60,000 行のプルリクエストを喜んで本番に投げ込み、CTO はそれを止めるときに水を差す人に見えてしまう。止める判断と、止めなかった責任だけが人間に残っている場面である。</p>
+      <p>同じ形の観察は、立場の違う書き手から独立に出ている。Will Larson は<a href="https://lethain.com/judgment-is-all-you-need/">残る制約は judgment だ</a>と書き、Charity Majors は<a href="https://www.oreilly.com/radar/ai-demands-more-engineering-discipline-not-less/">人間はコードの検証が最も苦手なのだから統制点をレビューではなく検証系の設計へ移せ</a>と書き、Bessemer は<a href="https://www.bvp.com/atlas/inside-ai-pilled-engineering-teams-five-lessons-for-scaling-without-losing-the-plot">思考を手放すな、手放すのは toil だ</a>と書いた。まとめると、読んでいない成果物を誰の権限で、どの停止線で、どの証拠で出荷するかを設計し、その結果を引き受ける仕事が残るということで、<a href="https://x.com/i/article/2074180908933095424">前に書いた</a>言い方では責任の終端という座席にあたる。</p>
+      <p>需要のデータもこの見方と合っていて、Indeed Hiring Lab によれば 2026 年 5 月時点で<a href="https://hiringlab.indeed.com/2026/07/23/the-labor-market-is-tilting-toward-seniority/">シニア向け求人は前年比 +14.7%、エントリー向けは −7.5%</a>、ソフトウェア開発ではシニアが求人の 69.3% を占める。同時に Korn Ferry の調査では従業員の <a href="https://fortune.com/2026/06/09/ai-agents-flattening-corporate-hierarchies-companies-managers-develop-new-playbook/">41% が自社の管理階層の削減を報告</a>している。二つを並べると、減っているのは進捗と調整を専業にする層で、判断を担う席の需要はむしろ増えている、というのが私の読みだ。Orosz の記事は CTO は low ROI になったかと問うが、精確には調整専任層が low ROI になったのであって、決める、止める、損をする席の値段は上がっている。</p>
+
+      <h2>肩書きは、オーナーシップの答えにならない</h2>
+      <p>では、その席に座る条件は何か。先の違和感の記事は経営への参画、最終責任と説明責任、オーナーシップ、一定以上のコミット総量を挙げていて、私もこの条件に同意する。同意したうえで、その条件を満たしているフルタイム CTO がどれだけいるかを考えると、話は変わってくる。</p>
+      <p>CxO は会社の経営に責任を負う役割で、責任に見合う報酬を得る必要があるが、その報酬の大半は株式やストックオプションという形で繰り延べられている。CEO より少ないのは普通で、CEO が取るリスクとのバランスで本人が納得できるなら問題はない。問題は、株式を持っているかどうかとオーナーシップを持っているかどうかが別だという点にある。Orosz の取材にこんな CTO が出てくる。普通株の 2% という手厚い持分を持っていたが、シリーズ A の投資家が 2 倍の優先分配を取っているため、会社が 2 億 1,000 万ドル以上で売れない限り取り分はゼロになり、その規模の売却は起きないと見て辞めた。持分はあったが、オーナーシップは最初から無かったわけだ。</p>
+      <p>英語圏で fractional を批判する人たちも、実はここを突いている。James McGovern は<a href="https://www.linkedin.com/pulse/what-fractional-cto-really-isand-when-thats-feature-bug-mcgovern-pkjse">多くの会社が買っているのは accountability の無い authority だ</a>と書き、Joseph Tomkinson は<a href="https://www.ctco.blog/posts/understanding-the-cto-path/">本物の CTO は技術判断で職を失える</a>と書いたが、どちらも時間の長短ではなく、何を失いうるかを見ている。</p>
+      <p>オーナーシップを分解すると三つになる。会社が伸びたときに自分も報われる上方の exposure、判断を誤ったときに解任されたり役員としての責任を問われたり評判を失ったりする下方の exposure、そして決定権だ。日本の執行役員 CTO で、ストックオプションは薄く、取締役として登記されておらず、予算と人事の最終決定は CEO にある、という形は珍しくないが、この形は三つとも薄い。肩書きは CTO でも、株を持たない CTO である。</p>
+      <p>例外はあって、超大規模な企業では、ブランドとポジションと現金報酬がオーナーシップの代替として十分に機能する。会社の外に肩書きの価値を裏付ける規格があるからだ。</p>
+
+      <h2>CTOの報酬は繰延である</h2>
+      <p>報酬は金銭だけではなく、社会的な地位、やることそのもの、自由度、ストレスの少なさも報酬で、人はこの束で働く場所を選んでいる。CTO の場合、束の中で金銭の部分だけが極端に繰り延べられていて、給与はスタッフエンジニアと大差なく、差は株式で、株式が現金になるのは何年も先の、起きるかどうかわからない出来事に依存する。</p>
+      <p>ここに AI が入った。Orosz は会社を、AI ネイティブとして勝っている会社、AI に脅かされて売却か転換を迫られる SaaS、AI と無関係な実世界の事業の三つに分けているが、大半のソフトウェア企業は前の二つに入り、事業の分散が上がった。株式の期待値は実現確率と実現時期で割り引かれるから、分散が上がれば、実現の確率が下がるか時期が遠のく分だけ割り引かれる。日本では IPO という出口がそもそも遠いというのが私の見立てで、この点は数字で確かめていないが、少なくとも繰延報酬を現在価値に直す割引率が AI の前より上がったことは確かだと思う。</p>
+      <p>割引率が上がると、同じ知見を現在報酬で売る形が合理的になる。Orosz の挙げた 10 の理由のうち、株式が無価値になること、fractional を選ぶこと、AI スタートアップがエンジニアに非 AI 企業の役員より高い現金を払うこと、の三つは、見出しで読む限り別々の理由ではなく、繰延報酬が現在報酬に負けたという一つの話だと私は読んでいる。</p>
+
+      <h2>分割されていたのは時間ではなく、オーナーシップだった</h2>
+      <p>ここで冒頭の仮置きが反転する。フルコミットにはオーナーシップが要るという前提はあの記事と同じだが、その前提から出てくる要求は名乗る側ではなく会社側に向いていて、実効的なオーナーシップを渡せない会社はフルコミットを要求できない。渡せないなら、時間を限って知見を買い、その分を現在報酬で払う形の方が誠実である。</p>
+      <p>誠実な形は二つしかなく、十分な株を持つフルコミットの CTO か、期限付きのオーナーシップを持つ fractional CTO かで、その中間にある株も exposure も無い CTO の肩書きが、最も不誠実な形になった。</p>
+      <p>期限付きオーナーシップと呼ぶのは、上方と下方の exposure を成果の定義と期限で切って持つことだ。上方は成果に連動した報酬や、短い権利確定期間と買い戻し条項のついた持分、あるいは保有会社の役員としての持分で、下方は成果が出なければ契約が切れることと、複数の会社で成立している評判を失うことである。技術顧問との差はここにあって、助言には exposure が無い。McGovern の言い方を借りれば fractional は時間を指す語であって責任を指す語ではなく、時間を限ることと責任を限ることは別の操作で、分割してよいのは前者だけだ。</p>
+      <p>この形の出口は最初から決まっている。Gradion の商品は初日から移行計画を契約に含めると書いているし、Ganesh Kompella は<a href="https://x.com/GaneshKompella/status/2090823896597451208">最良の fractional は常勤 CTO を採用して自分を不要にする</a>と書いていて、期限付きオーナーシップは、期限が来たら席を明け渡すところまで含めて一つの契約である。</p>
+      <figure class="visual">
+        <img src="/assets/fractional-cto-ladder.png" alt="技術顧問（助言）、Fractional CTO（権限あり、期限付き）、所有・権限を持つCTO（役員＋持分）、Tech CEO（全部が一人）へと上がる4段の梯子の図。右の段ほど椅子が大きく足元の影が濃い。下にexposureが「なし」から「全部」へ、AIの乗数が「小」から「最大」へ向かう2本の軸">
+      </figure>
+      <p>AI はこの梯子を変えず、各段に効く力を大きくするだけだ。ただし AI が増やすのは実行の量であって、それが成果になるかどうかは、止める権限と検証を誰が持つか、果実を受け取る exposure が誰にあるかで決まる。founder が検証者なしに AI で書いた 60,000 行は、権限はあるのに検証が無い形であり、権限の無い fractional の提案書は、実行はあるのに決定権が無い形であり、ストックオプションの薄い常勤 CTO は、事業が AI で加速しても果実を受け取れない形である。欠けているものは席ごとに違うが、どれも AI では埋まらない。</p>
+
+      <h2>自分の場合</h2>
+      <p>自分に当てはめると、名乗りは流しのAI技術顧問のままで CTO とは名乗らないが、求められれば Fractional CTO の席を担う。どう呼ぶかは顧客の側の要求で決まることで、私が厳密に決める話ではない。</p>
+      <p>顧客の株は持たないので、売っているのは顧客会社のオーナーシップではなく、所有者であるその会社の CEO や CFO のオーナーシップを効かせるための座席の設計になる。人件費と AI の費用をどう配分するか、どこで止めるか、止める判断を何で測るか、いつ自分が抜けるか。撤退の回路は支出を止める回路でもあるから、CFO と共同で持つことになる。私の exposure は契約にあって、<a href="/work/">関与の形</a>を先に公開し、稼働の上限を決め、成果が出なければ切られ、競合しうる案件は開示する。</p>
+      <p>入った会社の経営会議で私が論じるのは、技術の良し悪しというより、進捗と方向性と経済性で、人を増やす前に仕事が回る設計を先に作る。最終の決定権は相手に残し、検収と本番へ出す判断も相手が持つ。いま並行して入っている会社にも、この先入る会社にも、出している条件は同じである。</p>
+      <p>自社で先に型を作っていることが、この席に座る根拠になる。私は自分の会社で経理も情報システムも Web 運用も AI 前提で組み直し、その過程でできた指示ファイルや運用の型を<a href="/articles/agents-md-tips/">公開</a>してきたので、他社の席に持ち込むのはこの型である。梯子の段で言えば、代表取締役 CTO として株を持つ側に座った時期があり、いまは自分の会社では最上段に、他社では期限付きの段に座っている。同じ梯子を上下してきたから、どの段に何が要るかは体で知っている。</p>
+
+      <h2>最上段に座るということ</h2>
+      <p>梯子の最上段は自分の会社の経営者で、CEO と CTO と CFO の垣根が無く、責任の終端と配分者と検証者が一人に重なっている。協調のコストはゼロで、権限だけ渡されて責任を負わされることもその逆も起きず、撤退は自分が支出を止めるだけで済む。AI の乗数が最も出る形で、いま小さな会社を経営している技術者の多くが、この状態の速さを体感しているはずだ。</p>
+      <p>ただし上限があって、実行のスケールは AI でいくらでも伸びるが、責任のスケールは伸びない。一人が一週間に引き受けられる不可逆な判断の数には天井があり、会社が大きくなるときに増えるのはこの責任の終端の数で、AI は責任を持たないからここだけは人間の座席を増やすしかない。最上段の速さは、この密度に当たるまでの速さである。</p>
+      <p>だから最上段に座る者の仕事は、自分が天井に当たる前に座席を分ける設計を作っておくことになる。誰に何を所有させ、どの権限を渡し、どこで止めるかが設計できているなら、所有して CTO 級の人間を置くという形が次に来る。ただ、さらに跳ぶにはスケールする組織を作るしかないと分かっていながら、その組織の形が AI の時代にとって本当に良い形なのかは、まだ悩んでいる。責任の終端が一人に揃う速さは体で分かったが、それを損なわずに座席を増やす形は、まだ手の中に無い。いまの形の良さは確かで、未来の形は分からない。</p>
+      <p>fractional CTO という生き方を冒頭で株を持たない CTO の意味に仮置きしたが、ここまで書いて、指していたのは反対側だったと思う。時間を分割する fractional ではなく、株も exposure も無いまま CTO の肩書きだけを持つ形の方が株を持たない CTO で、期限を切ってオーナーシップを引き受けることが、fractional CTO という生き方である。</p>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span>© 2026 Ryo Manzoku</span>
+        <span><a href="/about/">About</a> · <a href="/work/">Work</a> · <a href="/articles/">Articles</a> · <a href="/contact/">Contact</a> · <a href="/llms.txt">llms.txt</a> · <a href="/sitemap.xml">sitemap</a></span>
+      </div>
+    </footer>
+  </body>
+</html>
